@@ -1,0 +1,15 @@
+
+/* Home editing pass: practical proof, less repetition, shared fluid gutters. */
+.hero-description{font-size:16px;line-height:1.5;max-width:40ch;margin:20px 0 0;color:white}
+.hero-products-cta{margin-top:24px}
+.projects-section{padding-top:90px;padding-bottom:64px}.projects-intro{margin-bottom:44px}
+.depot-section{min-height:660px}.depot-contact{min-height:660px;padding-top:44px;padding-bottom:44px;gap:24px}.depot-editorial{padding-top:48px;padding-bottom:48px;gap:44px}
+.depot-editorial h2{font-size:clamp(42px,3.7vw,64px);line-height:1.08}.depot-editorial-bottom{gap:25px;max-width:55ch}
+.depot-facts{margin:0;display:grid;gap:12px}.depot-facts>div{display:grid;grid-template-columns:100px minmax(0,1fr);gap:16px}.depot-facts dt{font-size:14px;color:var(--leaf);line-height:1.6}.depot-facts dd{font-size:16px;line-height:1.5;margin:0}
+.depot-material-note{padding-top:22px}.depot-material-note p{font-size:16px}
+.collections-section{padding-top:88px;padding-bottom:80px}.collections-intro{margin-bottom:44px}.collection-gallery{height:510px}.collection-panel[data-collection="finisate"] .collection-image{object-position:50% 65%}
+@media(max-width:1000px) and (min-width:701px){.depot-section,.depot-contact{min-height:640px}.depot-editorial{gap:32px}.depot-editorial h2{font-size:40px}.depot-facts>div{grid-template-columns:76px minmax(0,1fr);gap:12px}.collection-gallery{height:460px}}
+@media(max-width:700px){.hero-title-wrap{top:33%}.hero-description{font-size:15px;margin-top:16px}.hero-products-cta{margin-top:20px}.projects-section{padding-top:64px;padding-bottom:56px}.projects-intro{margin-bottom:30px}.depot-section{min-height:0}.depot-contact{min-height:500px;padding-top:30px;padding-bottom:30px;gap:20px}.depot-editorial{padding-top:40px;padding-bottom:40px;gap:32px}.depot-editorial h2{font-size:40px}.depot-editorial-bottom{gap:24px}.depot-facts>div{grid-template-columns:84px minmax(0,1fr);gap:12px}.depot-story p,.depot-facts dd,.depot-material-note p{font-size:16px}.collections-section{padding-top:64px;padding-bottom:64px}.collections-intro{margin-bottom:32px}.collection-gallery{height:auto}}
+@media(max-width:360px){.depot-editorial h2{font-size:36px}.depot-facts>div{grid-template-columns:72px minmax(0,1fr);gap:10px}}
+@media(max-width:700px){.project-product-title{position:relative;padding-right:0}.project-product-title h3{min-width:0}.project-product-arrow{position:absolute;right:0;top:-34px}.project-product-art{margin-bottom:12px}}
+@media(prefers-reduced-motion:reduce){.depot-contact{min-height:0}}

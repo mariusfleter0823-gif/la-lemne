@@ -1,0 +1,55 @@
+{
+  "boundaries": {
+    "source": "https://www.geoboundaries.org/api/current/gbOpen/ROU/ADM1/",
+    "boundaryID": "ROU-ADM1-36066543",
+    "provider": "World Bank / geoBoundaries",
+    "license": "CC BY 4.0",
+    "simplification": "Ramer-Douglas-Peucker 0.85 SVG units"
+  },
+  "places": {
+    "source": "OpenStreetMap Nominatim",
+    "coordinates": [
+      {
+        "lon": 20.624115,
+        "source": "Sânnicolau Mare, Timiș, 305600, România",
+        "lat": 46.0711247,
+        "name": "Sânnicolau Mare"
+      },
+      {
+        "lon": 21.2257474,
+        "source": "Timișoara, Timiș, România",
+        "lat": 45.7538355,
+        "name": "Timișoara"
+      },
+      {
+        "lon": 21.3196342,
+        "source": "Arad, România",
+        "lat": 46.1753793,
+        "name": "Arad"
+      },
+      {
+        "lon": 21.9285231,
+        "source": "Oradea, Zona Metropolitană Oradea, Bihor, 410100, România",
+        "lat": 47.0549163,
+        "name": "Oradea"
+      },
+      {
+        "lon": 21.887861,
+        "source": "Reșița, Caraș-Severin, România",
+        "lat": 45.289027,
+        "name": "Reșița"
+      },
+      {
+        "lon": 22.9008611,
+        "source": "Deva, Hunedoara, România",
+        "lat": 45.8817402,
+        "name": "Deva"
+      }
+    ]
+  },
+  "photo": {
+    "source": "User supplied: C:/Users/marius/Downloads/pexels-ninobur-17133452.jpg",
+    "use": "Illustrative material transport photograph, not claimed as La Lemne vehicle"
+  },
+  "curves": "Illustrative coverage links, not exact road routes"
+}

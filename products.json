@@ -1,0 +1,217 @@
+[
+  {
+    "slug": "dulapi-dimensionati",
+    "title": "Dulapi dimensionați",
+    "kind": "board",
+    "widths": [
+      10,
+      15,
+      20,
+      30
+    ],
+    "lengths": [
+      3,
+      4,
+      5
+    ],
+    "draw": {
+      "w": 20,
+      "h": 5,
+      "l": 4
+    },
+    "uses": "Elemente pentru cofraje și lucrări de construcții, conform proiectului.",
+    "heights": [
+      5
+    ],
+    "sections": {
+      "10": [
+        5
+      ],
+      "15": [
+        5
+      ],
+      "20": [
+        5
+      ],
+      "30": [
+        5
+      ]
+    }
+  },
+  {
+    "slug": "dulapi-nedimensionati",
+    "title": "Dulapi nedimensionați",
+    "kind": "unedged",
+    "lengths": [
+      3,
+      4,
+      5
+    ],
+    "draw": {
+      "w": 24,
+      "h": 5,
+      "l": 4
+    },
+    "uses": "Lucrări de construcții și cofraje, cu alegerea materialului după necesar.",
+    "heights": [
+      5
+    ]
+  },
+  {
+    "slug": "scandura-dimensionata",
+    "title": "Scândură dimensionată",
+    "kind": "board",
+    "widths": [
+      10,
+      15,
+      20,
+      25,
+      30
+    ],
+    "lengths": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "draw": {
+      "w": 20,
+      "h": 2.5,
+      "l": 4
+    },
+    "uses": "Astereală pentru acoperișuri și cofraje pentru elevații, conform proiectului.",
+    "heights": [
+      2.5
+    ],
+    "sections": {
+      "10": [
+        2.5
+      ],
+      "15": [
+        2.5
+      ],
+      "20": [
+        2.5
+      ],
+      "25": [
+        2.5
+      ],
+      "30": [
+        2.5
+      ]
+    }
+  },
+  {
+    "slug": "scandura-nedimensionata",
+    "title": "Scândură nedimensionată",
+    "kind": "unedged",
+    "lengths": [
+      3,
+      4,
+      5,
+      6
+    ],
+    "draw": {
+      "w": 24,
+      "h": 2.5,
+      "l": 4
+    },
+    "uses": "Cofraje și alte lucrări de construcții în care se poate folosi material cu lățimi variabile.",
+    "heights": [
+      2.5
+    ]
+  },
+  {
+    "slug": "lateti",
+    "title": "Leațuri / lăteți",
+    "kind": "batten",
+    "sections": {
+      "3": [
+        5
+      ],
+      "2.5": [
+        5
+      ]
+    },
+    "lengths": [
+      4
+    ],
+    "draw": {
+      "w": 2.5,
+      "h": 5,
+      "l": 4
+    },
+    "uses": "Elemente pentru acoperișuri, în secțiunile și dispunerea stabilite prin proiect."
+  },
+  {
+    "slug": "rigle",
+    "title": "Rigle din lemn",
+    "kind": "batten",
+    "sections": {
+      "5": [
+        5,
+        7
+      ]
+    },
+    "lengths": [
+      4
+    ],
+    "draw": {
+      "w": 5,
+      "h": 5,
+      "l": 4
+    },
+    "uses": "Acoperișuri, structuri de terase și elemente pentru cofraje, conform proiectului."
+  },
+  {
+    "slug": "lambriu",
+    "title": "Lambriu din lemn",
+    "kind": "lining",
+    "widths": [
+      9.6,
+      14
+    ],
+    "heights": [
+      1.25,
+      1.8
+    ],
+    "lengths": [
+      4
+    ],
+    "draw": {
+      "w": 14,
+      "h": 1.8,
+      "l": 4
+    },
+    "uses": "Placări și finisaje, inclusiv în zona de acoperire a teraselor. Nu este destinat pardoselilor."
+  },
+  {
+    "slug": "pazie",
+    "title": "Pazie din lemn",
+    "kind": "board",
+    "widths": [
+      19,
+      24
+    ],
+    "draw": {
+      "w": 19,
+      "h": 2,
+      "l": 4
+    },
+    "uses": "Închiderea și finisarea marginilor acoperișurilor.",
+    "heights": [
+      2
+    ],
+    "lengths": [
+      4
+    ],
+    "sections": {
+      "19": [
+        2
+      ],
+      "24": [
+        2
+      ]
+    }
+  }
+]

@@ -1,0 +1,67 @@
+.beam-page{background:white;color:var(--green);padding-top:var(--header-height);min-height:100svh}
+.beam-breadcrumb{display:flex;align-items:center;gap:14px;padding:22px var(--page-inset);font-size:14px;line-height:1.5}
+.beam-breadcrumb>a{border-bottom:1px solid #042a2240}.beam-breadcrumb>a:hover{border-color:var(--green)}
+.beam-drawing-stage{position:relative;background:#f3f7ef;min-height:510px;height:min(58vw,570px);display:flex;align-items:center;justify-content:center;padding:14px var(--page-inset) 40px}
+#beam-drawing{display:block;width:100%;height:100%;max-width:none;overflow:visible}
+.beam-detail-drawing{position:absolute;right:var(--page-inset);bottom:18px;width:270px;height:230px;overflow:visible}
+.beam-object>path{stroke:var(--green);stroke-width:1.25;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+#beam-top{fill:#fbfdf9}#beam-front{fill:white}#beam-side{fill:var(--pale)}#beam-grain{fill:none;stroke:#52786d;stroke-width:.65;opacity:.55}
+.beam-dimension,.beam-extension{fill:none;stroke:var(--green);stroke-width:1;vector-effect:non-scaling-stroke}
+.beam-dimension{marker-start:url(#beam-dimension-arrow);marker-end:url(#beam-dimension-arrow)}
+.beam-extension{opacity:.4;stroke-width:.75}
+.beam-dimensions text{font:400 19px Aspekta,Arial,sans-serif;fill:var(--green);paint-order:stroke;stroke:#f3f7ef;stroke-width:7px;stroke-linejoin:round}
+.beam-drawing-caption{position:absolute;left:var(--page-inset);bottom:16px;font-size:12px;line-height:1.4;margin:0}
+.beam-information{display:grid;grid-template-columns:1fr 1fr;gap:clamp(44px,8vw,150px);padding:52px var(--page-inset) 80px}
+.beam-information>h1{font-size:clamp(38px,3.5vw,60px);line-height:1.08;letter-spacing:-.035em;font-weight:350;color:var(--green);margin:0 0 22px}
+.beam-description>p{font-size:16px;line-height:1.55;margin:0 0 22px;max-width:53ch}.beam-description .beam-custom-note{font-size:14px;line-height:1.55;max-width:55ch;margin-top:30px}
+.beam-material{margin-top:32px;max-width:620px}
+.beam-material h2{font-size:20px;line-height:1.3;font-weight:400;letter-spacing:-.015em;margin:0 0 24px}
+.beam-specifications{margin:0;border-top:1px solid #042a2240}
+.beam-specifications>div{display:grid;grid-template-columns:minmax(105px,.55fr) minmax(0,1fr);column-gap:24px;align-items:baseline;padding:17px 0;border-bottom:1px solid #042a2224}
+.beam-specifications dt{font-size:14px;line-height:1.5;color:var(--mid-green)}
+.beam-specifications dd{font-size:16px;line-height:1.5;font-weight:400;margin:0}
+.beam-specifications>div:first-child dd{font-size:20px;line-height:1.3;letter-spacing:-.02em}
+.beam-unit{display:inline-flex;align-items:center;justify-content:center;min-width:32px;padding:1px 7px;margin-left:5px;background:var(--pale);font-size:13px;line-height:1.4;vertical-align:1px}
+.beam-configurator h2{font-size:24px;line-height:1.2;font-weight:400;letter-spacing:-.02em;margin:0 0 24px}
+.beam-selects{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.beam-selects label{font-size:14px;line-height:1.5;display:flex;flex-direction:column;gap:9px;min-width:0}
+.beam-selects select{width:100%;height:50px;border:1px solid #042a2250;background:white;color:var(--green);border-radius:0;font:400 15px Aspekta,Arial,sans-serif;padding:0 10px;cursor:pointer}
+.beam-selects select:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+.beam-selection{font-size:14px;line-height:1.5;margin:22px 0 0;min-height:21px}
+.beam-section-detail path{fill:var(--pale);stroke:var(--green);stroke-width:1.25;vector-effect:non-scaling-stroke}
+.beam-section-detail text{font:400 18px Aspekta,Arial,sans-serif;fill:var(--green)}
+.beam-enquiry{display:flex;align-items:center;justify-content:space-between;gap:22px;font-size:16px;line-height:1.4;border-top:1px solid #042a2238;padding-top:22px;margin-top:26px}
+.beam-enquiry>span{width:42px;height:42px;border:1px solid currentColor;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .25s,transform .35s var(--ease)}
+.beam-enquiry:hover>span{background:var(--pale);transform:rotate(45deg)}
+@media(max-width:1000px) and (min-width:701px){.beam-information{gap:35px}.beam-selects{grid-template-columns:1fr 1fr}.beam-selects label:last-child{grid-column:1/-1}.beam-drawing-stage{height:510px}}
+@media(max-width:700px){.beam-breadcrumb{padding-top:16px;padding-bottom:16px;font-size:13px}.beam-drawing-stage{height:400px;min-height:0;padding:8px 0 46px}#beam-drawing{height:100%;width:100%}.beam-dimensions text{font-size:25px}.beam-drawing-caption{font-size:11px;max-width:34ch;bottom:13px}.beam-information{display:flex;flex-direction:column;gap:34px;padding:32px var(--gutter) 54px}.beam-information>h1{font-size:39px;margin-bottom:18px}.beam-description>p{margin-bottom:16px}.beam-description .beam-custom-note{margin-top:20px}.beam-selects{gap:10px;grid-template-columns:1fr 1fr}.beam-selects label:last-child{grid-column:1/-1}.beam-selects select{font-size:15px}.beam-configurator h2{font-size:23px;margin-bottom:20px}}
+@media(max-width:700px){.beam-dimensions text{font-size:32px}.beam-section-detail text{font-size:25px}}
+@media(max-width:700px){.beam-detail-drawing{width:200px;height:172px;bottom:46px}.beam-drawing-caption{max-width:100%;right:var(--gutter)}}
+@media(max-width:360px){.beam-drawing-stage{height:350px}.beam-information>h1{font-size:35px}.beam-selects{gap:12px}.beam-selects select{font-size:14px;padding-left:7px}}
+@media(max-width:700px){.beam-drawing-stage{height:clamp(540px,155vw,760px);padding-top:8px;padding-bottom:46px}#beam-drawing .beam-dimensions text{font-size:19px}}
+@media(max-width:700px){.beam-material{margin-top:28px;max-width:none}.beam-material h2{font-size:20px;margin-bottom:20px}.beam-specifications>div{grid-template-columns:minmax(94px,.48fr) minmax(0,1fr);column-gap:18px;padding:16px 0}.beam-specifications dt{font-size:13px}.beam-specifications dd{font-size:16px}.beam-specifications>div:first-child dd{font-size:19px}}
+.beam-information{grid-template-areas:"title configurator" "description configurator";column-gap:clamp(44px,8vw,150px);row-gap:0}
+.beam-information>h1{grid-area:title;align-self:start}
+.beam-description{grid-area:description}
+.beam-configurator{grid-area:configurator}
+.beam-detail-drawing{bottom:8px;width:240px;height:auto}
+@media(max-width:700px){.beam-information{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"title" "configurator" "description";gap:30px}.beam-information>h1{margin:0}.beam-material{margin-top:0}.beam-detail-drawing{width:200px;height:auto;bottom:8px}}
+@media(max-width:700px){.beam-detail-drawing .beam-dimensions text{font-size:23px}}
+/* Product surface and primary enquiry action */
+.beam-product-page{background:#f3f7ef}
+.beam-product-page .site-header{background:transparent}
+.beam-page{background:#f3f7ef}
+.beam-information{background:white}
+.beam-enquiry{min-height:66px;padding:12px 16px 12px 22px;border:1px solid var(--green);background:var(--green);color:var(--pale);text-decoration:none;transition:background .25s,border-color .25s}
+.beam-enquiry>span{width:38px;height:38px;border:0;background:var(--leaf)}
+.beam-enquiry>span img{filter:brightness(0)}
+.beam-enquiry:hover{background:var(--mid-green);border-color:var(--mid-green)}
+.beam-enquiry:hover>span{background:var(--pale);transform:rotate(45deg)}
+.beam-enquiry:focus-visible{outline:2px solid var(--green);outline-offset:5px}
+@media(max-width:360px){.beam-enquiry{gap:12px;padding-left:16px;font-size:15px}}
+.product-availability{font-size:14px;line-height:1.55;margin:20px 0 0;max-width:55ch;color:var(--mid-green)}
+.beam-selects select:disabled{opacity:1;cursor:default;background:#f3f7ef;color:var(--mid-green);border-color:#042a2228}
+.product-drawing-note{position:absolute;left:var(--page-inset);bottom:15px;max-width:42ch;font-size:12px;line-height:1.45;margin:0;color:var(--mid-green)}
+@media(max-width:700px){.product-drawing-note{max-width:20ch;bottom:18px;font-size:11px}.beam-product-page[data-product-kind] .beam-detail-drawing{width:180px;bottom:8px}}
+
+.beam-selects select[hidden]{display:none!important}.fixed-measure{display:flex;align-items:center;min-height:50px;padding:0 0 8px;border-bottom:1px solid #042a2230;font-size:19px;line-height:1.3;color:var(--green)}

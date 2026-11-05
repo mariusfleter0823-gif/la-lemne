@@ -1,0 +1,6 @@
+{
+  "about-depot-720.jpg": {"source":"depot-timber.jpeg","origin":"User-supplied depot photograph","processing":"720px wide, aspect ratio preserved, JPEG quality80; no generative changes"},
+  "about-depot-1440.jpg": {"source":"depot-timber.jpeg","origin":"User-supplied depot photograph","processing":"1440px wide, aspect ratio preserved, JPEG quality80; no generative changes"},
+  "contact-depot-720.jpg": {"source":"depot-delivery.jpeg","origin":"User-supplied depot photograph","processing":"720px wide, aspect ratio preserved, JPEG quality80; no generative changes"},
+  "contact-depot-1440.jpg": {"source":"depot-delivery.jpeg","origin":"User-supplied depot photograph","processing":"1440px wide, aspect ratio preserved, JPEG quality80; no generative changes"}
+}
