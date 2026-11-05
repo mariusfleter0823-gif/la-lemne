@@ -61,12 +61,25 @@
     if (next.disabled) prev.focus({preventScroll: true});
   });
   dots.forEach(button => button.addEventListener('click', () => show(Number(button.dataset.galleryIndex))));
+  let gesture;
+  stage.addEventListener('pointerdown', event => {
+    if(event.pointerType==='mouse'||event.target.closest('button')||!event.isPrimary)return;
+    gesture={id:event.pointerId,x:event.clientX,y:event.clientY};
+    stage.setPointerCapture(event.pointerId);
+  });
+  stage.addEventListener('pointerup', event => {
+    if(!gesture||gesture.id!==event.pointerId)return;
+    const dx=event.clientX-gesture.x,dy=event.clientY-gesture.y;
+    gesture=null;
+    if(Math.abs(dx)>=45&&Math.abs(dx)>Math.abs(dy)*1.3)show(index+(dx<0?1:-1));
+  });
+  stage.addEventListener('pointercancel',()=>{gesture=null});
   stage.addEventListener('keydown', event => {
     if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key) || !event.target.closest('button')) return;
     event.preventDefault();
     show(event.key === 'Home' ? 0 : event.key === 'End' ? lastIndex : index + (event.key === 'ArrowRight' ? 1 : -1));
     if (event.target.closest('.product-gallery-dots')) dots[index].focus({preventScroll: true});
-    else if (document.activeElement.disabled) (index === 0 ? next : prev).focus({preventScroll: true});
+    else if (document.activeElement.disabled) dots[index].focus({preventScroll: true});
   });
   document.querySelectorAll('.beam-selects select').forEach(select => select.addEventListener('change', () => show(0)));
   new ResizeObserver(moveIndicator).observe(dotnav);

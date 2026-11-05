@@ -7,3 +7,5 @@
 .beam-page .product-drawing-note{position:static;max-width:none;margin:0;padding:12px var(--page-inset);font-size:12px;line-height:1.5;background:#f3f7ef}.product-gallery-dots button{width:44px;height:44px}.product-gallery-photo{padding:24px 58px 64px}@media(max-width:700px){.product-gallery-photo{padding:16px 12px 64px}.beam-page .product-drawing-note{font-size:12px;padding-top:8px;padding-bottom:12px}}
 
 .product-photo-caption{position:absolute;top:14px;left:18px;right:18px;z-index:2;font-size:12px;line-height:1.4;color:var(--green);margin:0;visibility:hidden;pointer-events:none}.beam-drawing-stage:not([data-gallery-index="0"]) .product-photo-caption{visibility:visible}
+
+.beam-drawing-stage.has-product-gallery{touch-action:pan-y pinch-zoom}.beam-drawing-stage .product-gallery-prev,.beam-drawing-stage .product-gallery-next{display:none}

@@ -3,6 +3,13 @@
   const panels=[...gallery.querySelectorAll('.collection-panel')];
   const hover=window.matchMedia('(hover: hover) and (pointer: fine)');
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+  const mobile=window.matchMedia('(max-width:700px)');
+  panels.forEach(panel=>{
+    const surface=document.createElement('a');
+    surface.className='collection-mobile-link';surface.href=panel.querySelector('.collection-details a').getAttribute('href');
+    surface.setAttribute('aria-label','Vezi colecția '+panel.querySelector('h3').textContent);
+    panel.append(surface);
+  });
   const reveals=new Map();
   gsap.registerPlugin(SplitText);
   let active=null;
@@ -46,6 +53,10 @@
     reveals.set(panel,{split});
   }
   function activate(panel){
+    if(mobile.matches){
+      panels.forEach(item=>{clearReveal(item);item.classList.add('is-active');const details=item.querySelector('.collection-details');details.inert=false;details.setAttribute('aria-hidden','false');item.querySelector('.collection-expand').setAttribute('aria-expanded','true')});
+      return;
+    }
     if(active===panel)return;
     if(active)clearReveal(active);
     active=panel;gallery.classList.toggle('has-active',Boolean(panel));
@@ -60,6 +71,7 @@
   // One collection always stays selected, including after pointer/focus leave.
   hover.addEventListener('change',()=>{if(active)sizeDetails(active)});
   activate(panels[0]);
+  mobile.addEventListener('change',()=>{active=null;panels.forEach(p=>clearReveal(p));activate(panels[0])});
   document.fonts.ready.then(()=>{if(active)sizeDetails(active)});
   let resizeTimer;
   window.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(active)sizeDetails(active)},150)});
