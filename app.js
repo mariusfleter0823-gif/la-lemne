@@ -11,7 +11,7 @@ video.muted=true;
 if(reducedMotion.matches){video.autoplay=false;video.pause()}else{tryPlay()}
 video.addEventListener('play',reflectVideoState);
 video.addEventListener('pause',reflectVideoState);
-video.addEventListener('error',()=>{video.style.opacity='0';document.querySelector('.hero').style.backgroundImage="url('assets/hero-poster.jpg')";document.querySelector('.hero').style.backgroundSize='cover';videoToggle.hidden=true});
+video.addEventListener('error',()=>{video.style.opacity='0';document.querySelector('.hero').style.backgroundImage="url('assets/hero-poster.avif')";document.querySelector('.hero').style.backgroundSize='cover';videoToggle.hidden=true});
 videoToggle.addEventListener('click',()=>{if(video.paused){manuallyPaused=false;tryPlay()}else{manuallyPaused=true;video.pause()}});
 reducedMotion.addEventListener('change',e=>{if(e.matches){video.pause()}else if(!manuallyPaused){tryPlay()}});
 document.addEventListener('visibilitychange',()=>{if(document.hidden){video.pause()}else if(!manuallyPaused&&!reducedMotion.matches){tryPlay()}});
