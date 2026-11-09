@@ -45,5 +45,5 @@ for (const name of pages) {
 }
 fs.writeFileSync(path.join(out, 'robots.txt'), 'User-agent: *\nAllow: /\n\nSitemap: ' + origin + '/sitemap.xml\n');
 fs.writeFileSync(path.join(out, 'sitemap.xml'), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + pages.map(name => '<url><loc>' + origin + '/' + (name === 'index.html' ? '' : name) + '</loc></url>').join('') + '</urlset>\n');
-fs.writeFileSync(path.join(out, '_redirects'), '/la-lemne/* /:splat 301\nhttps://www.lalemne.ro/* https://lalemne.ro/:splat 301\n');
+fs.writeFileSync(path.join(out, '_redirects'), '/la-lemne/* /:splat 301\n');
 console.log('Prepared ' + pages.length + ' pages for ' + origin);
