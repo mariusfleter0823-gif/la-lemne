@@ -71,7 +71,7 @@
     status.textContent=`Secțiune ${state.w} × ${state.h} cm · lungime ${state.l*100} cm`;
     node('beam-svg-title').textContent=`Grindă cu lățimea ${state.w} cm, înălțimea ${state.h} cm și lungimea ${state.l*100} cm`;
     svg.dataset.widthMm=state.w*10;svg.dataset.heightMm=state.h*10;svg.dataset.lengthMm=state.l*1000;
-    document.querySelectorAll('[data-configurator-enquiry]').forEach(a=>{const product=`grindă ${state.w} × ${state.h} cm, lungime ${state.l*100} cm`;a.dataset.product=product;if(a.hasAttribute('data-whatsapp-enquiry'))a.href='https://wa.me/40758901523?text='+encodeURIComponent(`Bună ziua! Doresc o ofertă pentru ${product}. Cantitate necesară: __ m³. Localitatea de livrare: __.`);});
+    document.querySelectorAll('[data-configurator-enquiry]').forEach(a=>{const product=`grindă ${state.w} × ${state.h} cm, lungime ${state.l*100} cm`;a.dataset.product=product;if(a.hasAttribute('data-whatsapp-enquiry'))a.href='https://wa.me/40746820092?text='+encodeURIComponent(`Bună ziua! Doresc o ofertă pentru ${product}. Cantitate necesară: __ m³. Localitatea de livrare: __.`);});
     tween?.kill();
     if(change&&!reduced.matches)tween=gsap.to(shape,{...state,duration:.45,ease:'power2.inOut',onUpdate:draw});else{Object.assign(shape,state);draw()}
     if(change){const url=new URL(location.href);url.searchParams.set('latime',state.w);url.searchParams.set('inaltime',state.h);url.searchParams.set('lungime',state.l);history.replaceState(null,'',url)}

@@ -26,3 +26,4 @@ body[data-footer-reveal="true"]>.site-footer{position:sticky;bottom:0}
 
 /* Preserve small visual type, increase mobile hit areas. */
 @media(max-width:700px){.footer-columns a:not(.footer-offer){min-height:44px;padding-top:10px;padding-bottom:10px;margin-bottom:0}.footer-columns h2{margin-bottom:8px}.footer-large-logo{display:none}.footer-bottom{justify-content:flex-start}.footer-brand-top p{font-size:13px}.footer-map-link img{bottom:14px}}
+.footer-legal{display:flex;flex-direction:column;align-items:flex-start;gap:5px;margin-bottom:8px}.footer-legal a{display:inline-flex;align-items:center;min-height:32px;color:inherit;font-size:12px;line-height:1.5;text-decoration:none}.footer-legal a:hover{text-decoration:underline;text-underline-offset:4px}@media(max-width:700px){.footer-brand-bottom:has(.footer-legal){display:block}.footer-legal a{min-height:44px}.footer-legal{margin-bottom:0}}

@@ -111,7 +111,7 @@ function openOffer(opener,product){
  offerOpener=menu.open?menuToggle:opener;
  const showOffer=()=>{
   document.querySelector('#offer-description').textContent=product?`Pentru ${product.toLowerCase()}, trimite-ne dimensiunile, cantitățile și localitatea de livrare.`:'Trimite-ne lista cu produsele, dimensiunile, cantitățile și localitatea de livrare.';
-  document.querySelector('.offer-whatsapp').href=`https://wa.me/40758901523?text=${encodeURIComponent(product?`Bună ziua! Doresc o ofertă pentru ${product.toLowerCase()}.`:'Bună ziua! Doresc o ofertă pentru material lemnos.')}`;
+  document.querySelector('.offer-whatsapp').href=`https://wa.me/40746820092?text=${encodeURIComponent(product?`Bună ziua! Doresc o ofertă pentru ${product.toLowerCase()}.`:'Bună ziua! Doresc o ofertă pentru material lemnos.')}`;
   offerMotion?.kill();offerPhase='opening';
   if(!reducedMotion.matches&&window.gsap){
    gsap.set(offer,{opacity:0,y:24,scale:.965,'--offer-dim':0,'--offer-blur':'0px',transformOrigin:'50% 50%'});

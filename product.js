@@ -49,7 +49,7 @@
    const selections=[];if(options.w.length)selections.push('lățime '+cm(state.w));if(heightOptions().length)selections.push((config.kind==='batten'?'înălțime ':'grosime ')+cm(state.h));if(options.l.length)selections.push('lungime '+cm(state.l*100));
    $('#beam-selection').textContent=selections.length?selections.map((s,i)=>i?s:s[0].toUpperCase()+s.slice(1)).join(' · '):'Dimensiunile se stabilesc la ofertare.';
    $('#beam-svg-title').textContent=config.title+(selections.length?', '+selections.join(', '):'');
-   document.querySelectorAll('[data-configurator-enquiry]').forEach(a=>{const product=config.title+(selections.length?' — '+selections.join(', '):'');a.dataset.product=product;if(a.hasAttribute('data-whatsapp-enquiry'))a.href='https://wa.me/40758901523?text='+encodeURIComponent(`Bună ziua! Doresc o ofertă pentru ${product}. Cantitate necesară: __ m³. Localitatea de livrare: __.`);});
+   document.querySelectorAll('[data-configurator-enquiry]').forEach(a=>{const product=config.title+(selections.length?' — '+selections.join(', '):'');a.dataset.product=product;if(a.hasAttribute('data-whatsapp-enquiry'))a.href='https://wa.me/40746820092?text='+encodeURIComponent(`Bună ziua! Doresc o ofertă pentru ${product}. Cantitate necesară: __ m³. Localitatea de livrare: __.`);});
    tween?.kill();if(animate&&!reduced.matches)tween=gsap.to(shape,{...state,duration:.45,ease:'power2.inOut',onUpdate:draw});else {Object.assign(shape,state);draw();}
    const url=new URL(location.href);for(const k of ['w','h','l']){if((k==='h'?heightOptions():options[k]).length)url.searchParams.set(keys[k],state[k]);else url.searchParams.delete(keys[k]);}history.replaceState(null,'',url);
  }
