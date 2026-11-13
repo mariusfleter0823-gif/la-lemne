@@ -65,7 +65,7 @@
     const banner=root.querySelector('#cookie-banner'), dialog=root.querySelector('dialog'), analytics=root.querySelector('#cookie-analytics'), marketing=root.querySelector('#cookie-marketing');
     function settings(){analytics.checked=!!consent?.analytics; marketing.checked=!!consent?.marketing;dialog.showModal();}
     root.addEventListener('click',e=>{const action=e.target.closest('[data-consent]')?.dataset.consent;if(action==='dismiss')save(false,false);else if(action==='accept')save(true,true);else if(action==='reject')save(false,false);else if(action==='save')save(analytics.checked,marketing.checked);else if(action==='settings')settings();else if(e.target.closest('.cookie-close'))dialog.close();});
-    const footer=document.querySelector('.footer-brand-bottom')||document.querySelector('.site-footer');
+    const footer=document.querySelector('.footer-legal')||document.querySelector('.site-footer');
     if(footer){const button=document.createElement('button');button.type='button';button.className='cookie-footer-button';button.textContent='Preferințe cookies';button.addEventListener('click',settings);footer.append(button);}
     banner.hidden=!!consent;
     document.addEventListener('click',e=>{
