@@ -24,7 +24,7 @@ for (const name of fs.readdirSync(root)) {
     } else text = text.replace('</head>', '<link rel="canonical" href="' + url + '"></head>');
     text = text.replace(/(<meta\b[^>]*property="og:url"[^>]*content=")[^"]*(")/g, '$1' + url + '$2');
     text = text.replace('</head>', '<link rel="describedby" href="/llms.txt" type="text/plain"><link rel="ard" href="/.well-known/ard.json" type="application/json"></head>');
-    text = text.replace(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/g, (_, source) => {
+    text = text.replace(/(<script\b[^>]*\btype="application\/ld\+json"[^>]*>)([\s\S]*?)(<\/script>)/g, (_, opening, source, closing) => {
       const absolute = value => {
         if (typeof value === 'string') {
           const resolved = value.startsWith('/') ? origin + value : value;
@@ -36,7 +36,7 @@ for (const name of fs.readdirSync(root)) {
         }
         return value;
       };
-      return '<script type="application/ld+json">' + JSON.stringify(absolute(JSON.parse(source))) + '</script>';
+      return opening + JSON.stringify(absolute(JSON.parse(source))) + closing;
     });
     }
   }
@@ -60,6 +60,17 @@ const catalogHtml = fs.readFileSync(path.join(root, 'produse.html'), 'utf8');
 const catalogMatch = catalogHtml.match(/<script id="catalog-data" type="application\/json">([\s\S]*?)<\/script>/);
 if (!catalogMatch) throw new Error('Product catalog data is missing');
 const catalog = JSON.parse(catalogMatch[1]);
+// Reflect the visible price ranges in Product markup; never invent ratings or stock.
+for (const product of catalog.filter(product => product.price)) {
+  const target = path.join(out, product.slug + '.html');
+  const html = fs.readFileSync(target, 'utf8').replace(/(<script\b[^>]*\btype="application\/ld\+json"[^>]*>)([\s\S]*?)(<\/script>)/g, (match, opening, source, closing) => {
+    const schema = JSON.parse(source);
+    if (schema['@type'] !== 'Product') return match;
+    schema.offers = { '@type': 'AggregateOffer', url: pageUrl(product.slug + '.html'), priceCurrency: 'RON', lowPrice: product.price.min, highPrice: product.price.max };
+    return opening + JSON.stringify(schema) + closing;
+  });
+  fs.writeFileSync(target, html);
+}
 const publicCatalog = {
   name: 'La Lemne — catalog de material lemnos',
   website: origin,
@@ -95,6 +106,6 @@ const discovery = { entries: [{
 }] };
 fs.mkdirSync(path.join(out, '.well-known'), { recursive: true });
 fs.writeFileSync(path.join(out, '.well-known', 'ard.json'), JSON.stringify(discovery, null, 2) + '\n');
-fs.writeFileSync(path.join(out, '_headers'), '/llms.txt\n  Content-Type: text/plain; charset=utf-8\n/.well-known/ard.json\n  Content-Type: application/json; charset=utf-8\n/catalog.json\n  Content-Type: application/json; charset=utf-8\n');
+fs.writeFileSync(path.join(out, '_headers'), "/*\n  X-Content-Type-Options: nosniff\n  X-Frame-Options: DENY\n  Referrer-Policy: strict-origin-when-cross-origin\n  Strict-Transport-Security: max-age=31536000\n  Permissions-Policy: camera=(), microphone=(), geolocation=()\n  Content-Security-Policy: object-src 'none'; base-uri 'self'; frame-ancestors 'none'; upgrade-insecure-requests\n/llms.txt\n  Content-Type: text/plain; charset=utf-8\n/.well-known/ard.json\n  Content-Type: application/json; charset=utf-8\n/catalog.json\n  Content-Type: application/json; charset=utf-8\n");
 fs.writeFileSync(path.join(out, '_redirects'), '/la-lemne/* /:splat 301\n');
 console.log('Prepared ' + pages.length + ' pages for ' + origin);
