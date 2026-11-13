@@ -36,19 +36,11 @@
   function copyLink(parent,source){const a=source.cloneNode(true);a.className='mobile-row';a.querySelectorAll('img,.current-marker').forEach(n=>n.remove());if(a.hasAttribute('data-product')||a.hasAttribute('data-offer-link'))a.classList.add('is-destination');parent.links.append(a);return a}
   const root=makePage('root','Meniu');
   copyLink(root,desktopNav.querySelector('[data-home-link]'));
-  pageButton(root,'Produse','products');
+  copyLink(root,desktopNav.querySelector('[data-products-link]'));
   const aboutLink=desktopNav.querySelector('[data-about-link]');
   if(aboutLink)copyLink(root,aboutLink);else pageButton(root,'Despre noi','about');
   copyLink(root,desktopNav.querySelector('[data-contact-link]')||desktopNav.querySelector(':scope > [data-offer-link]'));
   const info=menu.querySelector('.menu-info').cloneNode(true);info.classList.add('mobile-root-info');root.element.append(info);
-  const products=makePage('products','Produse');
-  [...menu.querySelector('#products-submenu').children].forEach((source,index)=>{
-    if(source.tagName==='DETAILS'){
-      const title=source.querySelector('summary').textContent.trim();const id=`category-${index}`;
-      pageButton(products,title,id);const category=makePage(id,title);
-      source.querySelectorAll('a[href]').forEach(link=>copyLink(category,link));
-    }else if(source.matches('a[href]'))copyLink(products,source);
-  });
   if(!aboutLink){
   const about=makePage('about','Despre noi');
   const aboutCopy=document.createElement('p');aboutCopy.className='mobile-about-copy';aboutCopy.textContent=menu.querySelector('#about-submenu p').textContent;about.element.append(aboutCopy);
