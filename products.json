@@ -36,6 +36,12 @@
       "30": [
         5
       ]
+    },
+    "price": {
+      "min": 1200,
+      "max": 1300,
+      "unit": "m³",
+      "vatRate": 21
     }
   },
   {
@@ -55,7 +61,13 @@
     "uses": "Lucrări de construcții și cofraje, cu alegerea materialului după necesar.",
     "heights": [
       5
-    ]
+    ],
+    "price": {
+      "min": 1200,
+      "max": 1300,
+      "unit": "m³",
+      "vatRate": 21
+    }
   },
   {
     "slug": "scandura-dimensionata",
@@ -99,6 +111,12 @@
       "30": [
         2.5
       ]
+    },
+    "price": {
+      "min": 1100,
+      "max": 1300,
+      "unit": "m³",
+      "vatRate": 21
     }
   },
   {
@@ -119,7 +137,13 @@
     "uses": "Cofraje și alte lucrări de construcții în care se poate folosi material cu lățimi variabile.",
     "heights": [
       2.5
-    ]
+    ],
+    "price": {
+      "min": 900,
+      "max": 1100,
+      "unit": "m³",
+      "vatRate": 21
+    }
   },
   {
     "slug": "lateti",
@@ -141,7 +165,16 @@
       "h": 5,
       "l": 4
     },
-    "uses": "Elemente pentru acoperișuri, în secțiunile și dispunerea stabilite prin proiect."
+    "uses": "Elemente pentru acoperișuri, în secțiunile și dispunerea stabilite prin proiect.",
+    "price": {
+      "min": 50,
+      "max": 120,
+      "unit": "pachet",
+      "quantityUnit": "pachete de 10 bucăți",
+      "saleLabel": "Pachet de 10 bucăți",
+      "saleSymbol": "10 buc.",
+      "vatRate": 21
+    }
   },
   {
     "slug": "rigle",
@@ -161,7 +194,16 @@
       "h": 5,
       "l": 4
     },
-    "uses": "Acoperișuri, structuri de terase și elemente pentru cofraje, conform proiectului."
+    "uses": "Acoperișuri, structuri de terase și elemente pentru cofraje, conform proiectului.",
+    "price": {
+      "min": 15,
+      "max": 25,
+      "unit": "buc.",
+      "quantityUnit": "bucăți",
+      "saleLabel": "Bucată",
+      "saleSymbol": "buc.",
+      "vatRate": 21
+    }
   },
   {
     "slug": "lambriu",
@@ -183,7 +225,16 @@
       "h": 1.8,
       "l": 4
     },
-    "uses": "Placări și finisaje, inclusiv în zona de acoperire a teraselor. Nu este destinat pardoselilor."
+    "uses": "Placări și finisaje, inclusiv în zona de acoperire a teraselor. Nu este destinat pardoselilor.",
+    "price": {
+      "min": 47,
+      "max": 55,
+      "unit": "m²",
+      "quantityUnit": "m²",
+      "saleLabel": "Metru pătrat",
+      "saleSymbol": "m²",
+      "vatRate": 21
+    }
   },
   {
     "slug": "pazie",

@@ -6,6 +6,14 @@
 .beam-showcase .product-intro{padding:0;text-align:center;flex:none}
 .beam-showcase .product-intro h1{font-size:clamp(54px,5.8vw,88px);line-height:1.04;letter-spacing:-.035em;font-weight:350;text-wrap:balance;text-align:center}
 .beam-showcase .product-intro p{font-size:15px;line-height:1.5;margin:15px 0 0;color:var(--mid-green)}
+.product-price{margin:16px auto 0;max-width:62ch;color:var(--green)}
+.beam-showcase .product-price .product-price-range{display:flex;flex-wrap:wrap;justify-content:center;align-items:baseline;gap:6px;margin:0;color:var(--green);font-size:22px;line-height:1.35;font-variant-numeric:tabular-nums}
+.product-price-range strong{font-weight:500;letter-spacing:-.02em}
+.product-price-range small{font-size:13px;font-weight:400;margin-left:4px}
+.beam-showcase .product-price .product-price-tax{font-size:14px;line-height:1.5;margin:5px 0 0;color:var(--mid-green)}
+.product-price-tax strong{font-weight:450}
+.beam-showcase .product-price .product-price-pack{font-size:13px;line-height:1.5;margin:4px 0 0}
+@media(max-width:700px){.product-price{margin-top:12px}.beam-showcase .product-price .product-price-range{font-size:20px;gap:5px}.beam-showcase .product-price .product-price-tax{font-size:13px;max-width:32ch;margin:6px auto 0}.beam-showcase .product-price .product-price-pack{max-width:30ch;margin:4px auto 0}}
 .beam-showcase .product-layout{flex:1;display:flex;flex-direction:column;align-items:stretch;gap:0;padding:0;min-height:0}
 .beam-showcase .product-media{display:flex;flex:1;width:100%;min-height:0;align-self:stretch;background:transparent;border-radius:0;overflow:visible}
 .beam-showcase .product-media .beam-drawing-stage{width:100%;height:auto;min-height:0;flex:1;background:transparent;padding:12px 0 66px}

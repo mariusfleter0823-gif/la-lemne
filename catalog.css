@@ -1,4 +1,11 @@
 .catalog-body{background:#f3f7ef;color:var(--green)}
+.catalog-price-note{font-size:13px;line-height:1.6;color:var(--mid-green);margin:0 0 24px;max-width:80ch}
+.catalog-card-price{margin:8px 0 10px;color:var(--green);font-variant-numeric:tabular-nums}
+.catalog-card .catalog-card-price p{margin:0;font-size:16px;line-height:1.45;color:var(--green)}
+.catalog-card-price strong{font-weight:500}
+.catalog-card-price span{font-size:12px;color:var(--mid-green);white-space:nowrap}
+.catalog-card .catalog-card-price .catalog-card-price-tax,.catalog-card .catalog-card-price .catalog-card-pack{font-size:13px;line-height:1.5;color:var(--mid-green);margin-top:3px}
+@media(max-width:700px){.catalog-card .catalog-card-price p{font-size:15px}.catalog-card .catalog-card-price .catalog-card-price-tax,.catalog-card .catalog-card-price .catalog-card-pack{font-size:12px}.catalog-price-note{font-size:12px;margin-bottom:20px}}
 .catalog-body:has(.catalog-filters.is-open) .site-header{visibility:hidden;pointer-events:none}
 .catalog-page{padding-top:var(--header-height)}
 .catalog-hero{height:340px;position:relative;isolation:isolate;color:white;overflow:hidden}
