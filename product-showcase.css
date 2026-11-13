@@ -36,13 +36,13 @@
 .beam-showcase .beam-enquiry>span{width:36px;height:36px}
 .product-contact-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;min-width:0}
 .beam-showcase .product-contact-actions a{display:flex;align-items:center;justify-content:center;gap:10px;min-width:0;min-height:66px;padding:10px 12px;margin:0;border:1px solid var(--green);border-radius:10px;font-size:16px;line-height:1.4;font-weight:450;text-decoration:none;transition:background .2s,color .2s,border-color .2s}
-.beam-showcase .beam-call{background:var(--green);color:white}
-.beam-showcase .beam-call>img{filter:brightness(0) invert(1);flex-shrink:0}
-.beam-showcase .beam-call:hover{background:var(--mid-green);border-color:var(--mid-green)}
-.beam-showcase .product-contact-actions .beam-enquiry{background:white;color:var(--green);border-color:rgb(4 42 34 / .24)}
+.beam-showcase .beam-call{background:white;color:var(--green);border-color:rgb(4 42 34 / .24)}
+.beam-showcase .beam-call>img{filter:brightness(0);flex-shrink:0}
+.beam-showcase .beam-call:hover{background:var(--pale);border-color:var(--mid-green)}
+.beam-showcase .product-contact-actions .beam-enquiry{background:var(--green);color:white;border-color:var(--green)}
 .beam-showcase .product-contact-actions .beam-enquiry>span{width:22px;height:22px;background:transparent;order:-1}
-.beam-showcase .product-contact-actions .beam-enquiry>span img{width:22px;height:22px}
-.beam-showcase .product-contact-actions .beam-enquiry:hover{background:var(--pale);border-color:var(--mid-green)}
+.beam-showcase .product-contact-actions .beam-enquiry>span img{width:22px;height:22px;filter:brightness(0) invert(1)}
+.beam-showcase .product-contact-actions .beam-enquiry:hover{background:var(--mid-green);border-color:var(--mid-green)}
 .beam-showcase .product-contact-actions .beam-enquiry:hover>span{background:transparent;transform:none}
 .beam-showcase .product-contact-actions a:focus-visible{outline:2px solid var(--green);outline-offset:3px}
 .beam-showcase-page .beam-information{padding-top:32px;padding-bottom:70px}
