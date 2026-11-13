@@ -1,0 +1,37 @@
+# La Lemne
+
+> La Lemne comercializează material lemnos din brad și molid pentru construcții. Depozitul este în Sânnicolau Mare, județul Timiș. Site-ul prezintă produsele și dimensiunile; ofertele se discută prin telefon sau WhatsApp.
+
+Gama confirmată include grinzi, dulapi dimensionați și nedimensionați, scândură dimensionată și nedimensionată, leațuri / lăteți, rigle, lambriu și pazie. Grinzile au lungimi de 3–10 m. Pentru produsele brute există variante uscate natural sau verzi, cu disponibilitatea confirmată la ofertare. La Lemne nu comercializează pardoseli de terasă.
+
+Prețurile publicate sunt orientative și negociabile. Unitățile diferă: m³ pentru grinzi, scândură și dulapi; bucată pentru rigle; pachet de 10 bucăți pentru leațuri; m² pentru lambriu. Prețul final, dimensiunile, cantitatea și disponibilitatea se confirmă în ofertă.
+
+Livrările se concentrează pe Timiș, Arad, Bihor, Caraș-Severin și Hunedoara; la nevoie se poate livra și în alte județe din România. Transportul basculabil poate fi gratuit în funcție de cantitate și distanță. Certificatul de calitate și declarația de conformitate pot fi oferite la cerere, în funcție de produs și lot.
+
+Contact public: +40 746 820 092, contact@lalemne.ro. Adresă: Strada Drumul Morii nr. 1A, Sânnicolau Mare, Timiș, România.
+
+## Catalog și produse
+
+- [Catalogul de produse](https://lalemne.ro/produse): Produse grupate și filtrabile după utilizare și dimensiuni.
+- [Catalog JSON](https://lalemne.ro/catalog.json): Catalog public, doar pentru citire, generat din aceleași date ca pagina de produse. Unitățile dimensiunilor sunt indicate explicit; nu reprezintă stocuri în timp real.
+- [Grinzi din lemn](https://lalemne.ro/grinzi): Secțiuni de la 8 × 8 la 20 × 20 cm, inclusiv secțiuni dreptunghiulare; lungimi de 3–10 m.
+- [Dulapi dimensionați](https://lalemne.ro/dulapi-dimensionati): Grosime de 5 cm, lățimi de 10, 15, 20 și 30 cm, lungimi de 3, 4 și 5 m.
+- [Dulapi nedimensionați](https://lalemne.ro/dulapi-nedimensionati): Grosime de 5 cm, lățimi variabile, lungimi de 3, 4 și 5 m.
+- [Scândură dimensionată](https://lalemne.ro/scandura-dimensionata): Grosime de 2,5 cm, lățimi de 10, 15, 20, 25 și 30 cm, lungimi de 3–6 m.
+- [Scândură nedimensionată](https://lalemne.ro/scandura-nedimensionata): Grosime de 2,5 cm, lățimi variabile, lungimi de 3–6 m.
+- [Leațuri / lăteți](https://lalemne.ro/lateti): Secțiuni de 2,5 × 5 și 3 × 5 cm, lungime de 4 m; vânzare la pachet de 10 bucăți.
+- [Rigle](https://lalemne.ro/rigle): Secțiuni de 5 × 5 și 5 × 7 cm, lungime de 4 m; vânzare la bucată.
+- [Lambriu](https://lalemne.ro/lambriu): Lungime de 4 m, lățimi de 96 și 140 mm, grosimi de 12,5 și 18 mm; vânzare la m².
+- [Pazie](https://lalemne.ro/pazie): Lățimi de 19 și 24 cm, grosime de 2 cm, lungime de 4 m.
+
+## Companie și contact
+
+- [La Lemne](https://lalemne.ro/): Prezentarea firmei, produse pentru acoperișuri, terase și elevații, condițiile transportului și întrebări frecvente.
+- [Despre La Lemne](https://lalemne.ro/despre-noi): Informații despre companie și colaborare.
+- [Contact](https://lalemne.ro/contact): Telefon, WhatsApp, email și localizarea depozitului.
+
+## Optional
+
+- [Politica de confidențialitate](https://lalemne.ro/politica-de-confidentialitate): Prelucrarea datelor personale.
+- [Politica de cookies](https://lalemne.ro/politica-de-cookies): Utilizarea cookieurilor și preferințe.
+- [Termeni și condiții](https://lalemne.ro/termeni-si-conditii): Condițiile utilizării site-ului.
