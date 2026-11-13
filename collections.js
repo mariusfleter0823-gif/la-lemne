@@ -4,12 +4,6 @@
   const hover=window.matchMedia('(hover: hover) and (pointer: fine)');
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
   const mobile=window.matchMedia('(max-width:700px)');
-  panels.forEach(panel=>{
-    const surface=document.createElement('a');
-    surface.className='collection-mobile-link';surface.href=panel.querySelector('.collection-details a').getAttribute('href');
-    surface.setAttribute('aria-label','Vezi colecția '+panel.querySelector('h3').textContent);
-    panel.append(surface);
-  });
   const reveals=new Map();
   gsap.registerPlugin(SplitText);
   let active=null;
@@ -29,19 +23,19 @@
     paragraph.parentElement.append(measure);
     const height=measure.getBoundingClientRect().height;
     measure.remove();
-    const linkHeight=panel.querySelector('.collection-details a').offsetHeight;
+    const linkHeight=panel.querySelector('.collection-details .collection-cta').offsetHeight;
     content.style.setProperty('--details-height',`${Math.ceil(18+height+18+linkHeight+2)}px`);
   }
   function clearReveal(panel){
     const reveal=reveals.get(panel);
     if(!reveal)return;
     reveal.split.revert();
-    gsap.set(panel.querySelector('.collection-details a'),{clearProps:'transform,opacity,visibility'});
+    gsap.set(panel.querySelector('.collection-details .collection-cta'),{clearProps:'transform,opacity,visibility'});
     reveals.delete(panel);
   }
   function revealParagraph(panel){
     if(reduced.matches)return;
-    const link=panel.querySelector('.collection-details a');
+    const link=panel.querySelector('.collection-details .collection-cta');
     const split=SplitText.create(panel.querySelector('.collection-details p'),{
       type:'lines',mask:'lines',linesClass:'collection-line',autoSplit:true,
       onSplit(self){
@@ -54,19 +48,19 @@
   }
   function activate(panel){
     if(mobile.matches){
-      panels.forEach(item=>{clearReveal(item);item.classList.add('is-active');const details=item.querySelector('.collection-details');details.inert=false;details.setAttribute('aria-hidden','false');item.querySelector('.collection-expand').setAttribute('aria-expanded','true')});
+      panels.forEach(item=>{clearReveal(item);item.classList.add('is-active');const details=item.querySelector('.collection-details');details.inert=false;details.setAttribute('aria-hidden','false');});
       return;
     }
     if(active===panel)return;
     if(active)clearReveal(active);
     active=panel;gallery.classList.toggle('has-active',Boolean(panel));
     if(panel)sizeDetails(panel);
-    panels.forEach(item=>{const expanded=item===panel;item.classList.toggle('is-active',expanded);item.querySelector('.collection-expand').setAttribute('aria-expanded',String(expanded));const details=item.querySelector('.collection-details');details.inert=!expanded;details.setAttribute('aria-hidden',String(!expanded))});
+    panels.forEach(item=>{const expanded=item===panel;item.classList.toggle('is-active',expanded);const details=item.querySelector('.collection-details');details.inert=false;details.setAttribute('aria-hidden',String(!expanded))});
     if(panel)revealParagraph(panel);
   }
   panels.forEach(panel=>{
     panel.addEventListener('pointerenter',()=>{if(hover.matches)activate(panel)});
-    panel.querySelector('.collection-expand').addEventListener('click',()=>activate(panel));
+    panel.addEventListener('focus',()=>activate(panel));
   });
   // One collection always stays selected, including after pointer/focus leave.
   hover.addEventListener('change',()=>{if(active)sizeDetails(active)});
