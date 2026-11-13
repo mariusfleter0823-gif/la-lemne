@@ -28,9 +28,9 @@
    const scale=Math.min(area.w/(maxX-minX),area.h/(maxY-minY)),ox=area.x+(area.w-(maxX-minX)*scale)/2,oy=area.y+(area.h-(maxY-minY)*scale)/2;
    const p=(x,y,z=0)=>{const a=project([x,y,z]);return [ox+(a[0]-minX)*scale,oy+(a[1]-minY)*scale]};
    const a=p(-s.w/2,-s.h/2),b=p(s.w/2,-s.h/2),c=p(s.w/2,s.h/2),farA=p(-s.w/2,-s.h/2,s.l*100),farB=p(s.w/2,-s.h/2,s.l*100),farC=p(s.w/2,s.h/2,s.l*100);
-   const edge=(side,y)=>Array.from({length:25},(_,i)=>{const t=i/24,rough=config.kind==='unedged'?s.w*.42*(.65*Math.sin(t*Math.PI*2+side)+.35*Math.sin(t*Math.PI*5+side))*Math.sin(Math.PI*t):0;return p(side*(s.w/2+rough),y,t*s.l*100)});
-   if(config.kind==='unedged'){path('beam-top',poly([...edge(-1,-s.h/2),...edge(1,-s.h/2).reverse()]));path('beam-side',poly([...edge(1,-s.h/2),...edge(1,s.h/2).reverse()]));}
-   else {path('beam-top',poly([a,farA,farB,b]));path('beam-side',poly([b,farB,farC,c]));}
+   // Straight illustrative edges keep the end faces and dimensions legible.
+   // Unedged products still retain variable-width controls and product facts.
+   path('beam-top',poly([a,farA,farB,b]));path('beam-side',poly([b,farB,farC,c]));
    path('beam-front',poly(front.map(([x,y])=>p(x,y))));
    let grain='';for(const t of (config.kind==='lining'?[.08,.1,.9,.92]:[.24,.67]))grain+=line(p(-s.w/2+s.w*t,-s.h/2),p(-s.w/2+s.w*t,-s.h/2,s.l*100));path('beam-grain',grain);
    const k=config.kind==='lining'?8:4,da=[800,485],db=[800+s.w*k,485],dd=[800,485+s.h*k];
