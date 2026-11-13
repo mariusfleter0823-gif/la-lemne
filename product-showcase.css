@@ -23,7 +23,7 @@
 .beam-showcase .product-media .product-gallery-prev{left:0}
 .beam-showcase .product-media .product-gallery-next{right:0}
 .beam-showcase .product-gallery-dots{bottom:8px;background:rgb(255 255 255 / .65)}
-.beam-showcase .beam-configurator{width:min(100%,1000px);margin:20px auto 0;display:grid;grid-template-columns:minmax(0,1fr) 238px;align-items:stretch;gap:12px;padding:8px;background:white;border-radius:16px;box-shadow:0 12px 36px rgb(4 42 34 / .09);flex:none}
+.beam-showcase .beam-configurator{width:min(100%,1120px);margin:20px auto 0;display:grid;grid-template-columns:minmax(0,1fr) 330px;align-items:stretch;gap:12px;padding:8px;background:white;border-radius:16px;box-shadow:0 12px 36px rgb(4 42 34 / .09);flex:none}
 .beam-showcase .beam-configurator h2,.beam-showcase .beam-selection{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 .beam-showcase .beam-selects{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;align-items:stretch}
 .beam-showcase .beam-selects label{padding:5px 20px;gap:1px;font-size:12px;line-height:1.5;color:var(--mid-green);justify-content:center}
@@ -34,10 +34,21 @@
 .beam-showcase .beam-selects select:focus-visible{outline-offset:3px;border-radius:3px}
 .beam-showcase .beam-enquiry{min-height:66px;padding:10px 16px 10px 22px;margin:0;border:0;border-radius:10px;font-size:16px;font-weight:450;line-height:1.4;gap:20px}
 .beam-showcase .beam-enquiry>span{width:36px;height:36px}
+.product-contact-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;min-width:0}
+.beam-showcase .product-contact-actions a{display:flex;align-items:center;justify-content:center;gap:10px;min-width:0;min-height:66px;padding:10px 12px;margin:0;border:1px solid var(--green);border-radius:10px;font-size:16px;line-height:1.4;font-weight:450;text-decoration:none;transition:background .2s,color .2s,border-color .2s}
+.beam-showcase .beam-call{background:var(--green);color:white}
+.beam-showcase .beam-call>img{filter:brightness(0) invert(1);flex-shrink:0}
+.beam-showcase .beam-call:hover{background:var(--mid-green);border-color:var(--mid-green)}
+.beam-showcase .product-contact-actions .beam-enquiry{background:white;color:var(--green);border-color:rgb(4 42 34 / .24)}
+.beam-showcase .product-contact-actions .beam-enquiry>span{width:22px;height:22px;background:transparent;order:-1}
+.beam-showcase .product-contact-actions .beam-enquiry>span img{width:22px;height:22px}
+.beam-showcase .product-contact-actions .beam-enquiry:hover{background:var(--pale);border-color:var(--mid-green)}
+.beam-showcase .product-contact-actions .beam-enquiry:hover>span{background:transparent;transform:none}
+.beam-showcase .product-contact-actions a:focus-visible{outline:2px solid var(--green);outline-offset:3px}
 .beam-showcase-page .beam-information{padding-top:32px;padding-bottom:70px}
 
 .beam-showcase-page .beam-material{padding-top:36px;border-top:0}
-@media(min-width:701px) and (max-width:1000px){.beam-showcase{padding-top:126px;min-height:780px}.beam-showcase .product-intro h1{font-size:64px}.beam-showcase .beam-configurator{grid-template-columns:minmax(0,1fr) 210px}.beam-showcase .beam-selects label{padding-left:14px;padding-right:14px}.beam-showcase .beam-enquiry{padding-left:16px}.beam-showcase .product-media .beam-detail-drawing{width:160px}}
+@media(min-width:701px) and (max-width:1000px){.beam-showcase{padding-top:126px;min-height:780px}.beam-showcase .product-intro h1{font-size:64px}.beam-showcase .beam-configurator{grid-template-columns:minmax(0,1fr)}.beam-showcase .beam-selects label{padding-left:14px;padding-right:14px}.beam-showcase .product-contact-actions a{min-height:50px}.beam-showcase .product-media .beam-detail-drawing{width:160px}}
 @media(max-width:700px){
  .beam-showcase{height:auto;min-height:0;max-height:none;padding:112px var(--page-inset) 30px}
  .beam-showcase .product-intro h1{font-size:clamp(39px,10.5vw,57px);line-height:1.08;letter-spacing:-.03em}
@@ -56,6 +67,7 @@
  .beam-showcase .beam-enquiry{min-height:50px;padding:8px 12px 8px 16px;font-size:15px}
  .beam-showcase .beam-enquiry>span{width:32px;height:32px}
  .beam-showcase .beam-enquiry>span img{width:19px;height:19px}
+ .beam-showcase .product-contact-actions a{min-height:50px;padding:8px 10px;gap:8px;font-size:15px}
  .beam-showcase-page .beam-information{padding-top:22px;padding-bottom:44px}
  
  .beam-showcase-page .beam-material{padding-top:28px}
