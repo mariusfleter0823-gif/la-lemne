@@ -52,7 +52,7 @@ for (const name of htmlFiles) {
   });
   fs.writeFileSync(target, html);
 }
-fs.writeFileSync(path.join(out, 'robots.txt'), 'User-agent: *\nAllow: /\n\nSitemap: ' + origin + '/sitemap.xml\nAgentmap: ' + origin + '/.well-known/ard.json\n');
+fs.writeFileSync(path.join(out, 'robots.txt'), 'User-agent: *\nAllow: /\n\nSitemap: ' + origin + '/sitemap.xml\n');
 fs.writeFileSync(path.join(out, 'sitemap.xml'), '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + pages.map(name => '<url><loc>' + pageUrl(name) + '</loc></url>').join('') + '</urlset>\n');
 // Publish a read-only catalog from the same confirmed data used by the product grid.
 // Do not expose drawing-only sample widths or imply real-time stock availability.
