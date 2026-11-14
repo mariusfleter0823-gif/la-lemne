@@ -8,4 +8,4 @@
 
 .product-photo-caption{position:absolute;top:14px;left:18px;right:18px;z-index:2;font-size:12px;line-height:1.4;color:var(--green);margin:0;visibility:hidden;pointer-events:none}.beam-drawing-stage:not([data-gallery-index="0"]) .product-photo-caption{visibility:visible}
 
-.beam-drawing-stage.has-product-gallery{touch-action:pan-y pinch-zoom}.beam-drawing-stage .product-gallery-prev,.beam-drawing-stage .product-gallery-next{display:none}
+.beam-drawing-stage.has-product-gallery{touch-action:pan-y pinch-zoom}
