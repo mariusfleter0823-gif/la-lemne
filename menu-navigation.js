@@ -38,11 +38,10 @@
   copyLink(root,desktopNav.querySelector('[data-home-link]'));
   copyLink(root,desktopNav.querySelector('[data-products-link]'));
   const calculatorLink=menu.querySelector('[data-calculator-link]');
-  if(calculatorLink)copyLink(root,calculatorLink);
   const aboutLink=desktopNav.querySelector('[data-about-link]');
   if(aboutLink)copyLink(root,aboutLink);else pageButton(root,'Despre noi','about');
   copyLink(root,desktopNav.querySelector('[data-contact-link]')||desktopNav.querySelector(':scope > [data-offer-link]'));
-  if(calculatorLink){const link=calculatorLink.cloneNode(true);link.className='large-nav-link menu-calculator-compact';link.textContent='Calculator acoperiș lemn';desktopNav.append(link);}
+  if(calculatorLink){const link=calculatorLink.cloneNode(true);link.className='menu-calculator-compact';link.textContent='Calculator acoperiș lemn';menu.querySelector('.menu-info').append(link);}
   const info=menu.querySelector('.menu-info').cloneNode(true);info.classList.add('mobile-root-info');root.element.append(info);
   if(!aboutLink){
   const about=makePage('about','Despre noi');
