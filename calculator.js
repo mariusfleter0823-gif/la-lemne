@@ -41,26 +41,43 @@ function update() {
   $('hip-section-field').hidden = !['hip','lshape'].includes(next.shape);
   $('valley-section-field').hidden = next.shape !== 'lshape';
   $('shape-help').textContent = next.shape === 'lshape' ? 'Două aripi cu dimensiuni independente și aceeași pantă. Lățimi diferite înseamnă coame la înălțimi diferite, unite printr-un racord.' : next.shape === 'hip' ? `${next.length === next.width ? 'Bază pătrată: patru fețe triunghiulare, fără coamă orizontală.' : 'Bază dreptunghiulară: două trapeze și două triunghiuri.'} Toate au aceeași pantă.` : next.shape === 'gable' ? 'Două pante egale, cu coama la mijloc.' : 'Panta se întinde pe toată lățimea.';
-  for (const key of Object.keys(LIMITS)) { $(key).setAttribute('aria-invalid', String(Boolean(errors[key]))); $(`error-${key}`).textContent = errors[key] || ''; }
+  const directions = {
+    gable: 'Lungimea urmează coama; lățimea trece de la o streașină la cealaltă.',
+    mono: 'Lungimea urmează streașina; lățimea este distanța orizontală în direcția pantei.',
+    hip: 'Introdu cele două laturi ale bazei. Coama se așază automat pe latura mai lungă.',
+    lshape: 'Măsoară separat aripile A și B, ca în schiță. Lungimile includ colțul comun.'
+  };
+  $('direction-help').textContent = directions[next.shape];
+  const units = { length:'m', width:'m', wingLength:'m', wingWidth:'m', pitch:'°', spacing:'cm', battenSpacing:'cm', waste:'%' };
+  for (const key of Object.keys(LIMITS)) {
+    $(key).setAttribute('aria-invalid', String(Boolean(errors[key])));
+    const [min,max] = LIMITS[key];
+    $(`error-${key}`).textContent = errors[key]
+      ? (errors[key].startsWith('Introdu o valoare') ? `Introdu o valoare între ${min} și ${max} ${units[key]}.` : errors[key].replace(/(\d+)\.(\d+)/g,'$1,$2')) : '';
+  }
+  $('estimate-link').hidden = invalid;
+  $('settings-summary').textContent = ['spacing','battenSpacing','waste'].some(key => errors[key]) ? 'Verifică valorile marcate mai jos.' : `Căpriori ${next.section.replace('x',' × ')} cm · max. ${nf(next.spacing)} cm între axe · rezervă ${nf(next.waste)}%`;
+  if (['spacing','battenSpacing','waste'].some(key => errors[key])) form.querySelector('.advanced').open = true;
   document.body.classList.toggle('has-errors', invalid);
   $('print').disabled = invalid;
   $('whatsapp').setAttribute('aria-disabled', String(Boolean(invalid)));
   $('whatsapp').tabIndex = invalid ? -1 : 0;
   if (invalid) {
-    $('form-status').textContent = 'Verifică valorile marcate. Rezultatele afișate sunt de la ultimul calcul valid.';
+    $('form-status').textContent = 'Corectează câmpurile marcate pentru a actualiza estimarea. Desenul și cantitățile păstrează ultimul calcul valid.';
     $('whatsapp').removeAttribute('href');
     return;
   }
   if (values.shape !== next.shape) yaw = next.shape === 'lshape' ? .53 : -.62;
   values = next; result = calculate(values);
   $('pitch-range').value = values.pitch;
+  $('pitch-range').setAttribute('aria-valuetext', `${nf(values.pitch)} grade`);
   $('form-status').textContent = result.complete ? '' : 'Un căprior comun sau diagonal depășește lungimea de catalog de 10 m. Necesarul de grinzi și totalul se confirmă pe baza proiectului; nu presupunem îmbinări.';
   $('area').textContent = nf(result.area);
   $('rafter').textContent = nf(result.rafter, 2);
   $('rise').textContent = nf(result.rise, 2);
   const planText = values.shape==='lshape' ? `A: ${nf(values.length)} × ${nf(values.width)} m · B: ${nf(values.wingLength)} × ${nf(values.wingWidth)} m` : `${nf(values.length)} × ${nf(values.width)} m`;
   $('geometry-note').textContent = `${planText}, cu streșini incluse · pantă ${nf(values.pitch)}° (${nf(result.pitchPercent)}%). ${values.shape === 'lshape' ? `Înălțime coamă A ${nf(result.riseA,2)} m / B ${nf(result.riseB,2)} m · muchie ${nf(result.hipLength,2)} m · dolie ${nf(result.valleyLength,2)} m${result.transitionLength>1e-9 ? ` · racord ${nf(result.transitionLength,2)} m` : ""}. Fără lucarne sau goluri.` : `${values.shape === 'hip' ? `Coamă ${nf(result.ridge, 2)} m · 4 diagonale de ${nf(result.hipLength, 2)} m. ` : ''}Fără lucarne, dolii sau goluri.`}`;
-  $('materials-subtitle').textContent = `Include ${nf(values.waste)}% rezervă și rotunjirea la lungimi comerciale și pachete.`;
+  $('materials-subtitle').textContent = `Pentru ${nf(result.area)} m² pe pante · ${nf(values.waste)}% rezervă inclusă · rotunjit la bucăți și pachete. Nu reprezintă întreaga șarpantă.`;
   $('wood-volume').textContent = result.complete ? nf(result.volume, 2) : '—';
   $('total-price').textContent = rangeText(result.price);
   $('materials').innerHTML = result.rows.map(r => `<div class="material-row"><div class="material-name"><img src="assets/${r.image}" alt="" width="53" height="58" loading="lazy"><div><strong>${r.name}</strong><a href="/la-lemne/${r.slug}.html" target="_blank" rel="noopener">Vezi produsul ${arrow}</a></div></div><div class="quantity"><strong>${quantityText(r)}</strong><span>${rowText(r)}</span></div><div class="material-cost">${rangeText(r.cost)}<small>${nf(r.price[0], 0)}–${nf(r.price[1], 0)} lei/${r.unit}</small></div></div>`).join('');
@@ -86,12 +103,12 @@ function drawRoof() {
   const scene = buildRoofScene(values, result, mode), z = scene.base;
   for (const input of document.querySelectorAll('[data-visible]')) {
     const included = scene.enabled.includes(input.dataset.visible);
-    input.checked = visible[input.dataset.visible];
+    input.checked = included && visible[input.dataset.visible];
     input.disabled = mode === 'surface' || !included;
-    input.closest('label').title = included ? 'Afișează sau ascunde în desen; cantitatea nu se schimbă.' : 'Materialul nu este inclus în estimare. Îl poți adăuga din Setări pentru materiale.';
+    input.closest('label').title = included ? 'Afișează sau ascunde în desen; cantitatea nu se schimbă.' : 'Material neinclus. Îl poți adăuga din Materiale incluse în estimare.';
   }
   const shown = scene.enabled.filter(key => visible[key]);
-  $('layer-note').textContent = mode === 'surface' ? 'Suprafața geometrică. Vezi materialele în „Pe straturi” sau „Asamblat”.' : shown.length === 0 ? 'Niciun material vizibil. Bifează un strat pentru a-l afișa; cantitățile rămân aceleași.' : mode === 'layers' ? 'Straturi depărtate pentru vizualizare. Bifele schimbă doar desenul, nu cantitățile.' : 'Dispunere schematică a lemnului calculat. Fără folie sau învelitoare; nu este un plan de montaj.';
+  $('layer-note').textContent = mode === 'surface' ? 'Suprafața geometrică. Vezi materialele în „Pe straturi” sau „Asamblat”.' : shown.length === 0 ? 'Niciun material vizibil. Bifează un strat pentru a-l afișa; cantitățile rămân aceleași.' : mode === 'layers' ? 'Straturi depărtate pentru vizualizare. Bifele schimbă doar desenul, nu cantitățile.' : 'Materialele sunt suprapuse ca în acoperiș. Poți ascunde straturi ca să vezi dedesubt. Fără folie sau învelitoare; nu este un plan de montaj.';
   const vw = Math.max(280, $('roof-svg').clientWidth), vh = Math.max(260, $('roof-svg').clientHeight);
   $('roof-svg').setAttribute('viewBox', `0 0 ${vw} ${vh}`);
   const c = Math.cos(yaw), s = Math.sin(yaw), elevation = .49;
