@@ -225,3 +225,5 @@ html{scrollbar-gutter:stable}.offer-dialog::backdrop{background:rgba(4,22,17,var
 @media(max-width:700px){.collection-panel .collection-title-row{transform:none;transition:none}.collection-panel .collection-details{height:auto;opacity:1;transition:none}.collection-panel .collection-details-inner{height:auto;overflow:visible}.collection-panel .collection-details p{margin:14px 0 0}.collection-panel .collection-arrow,.collection-panel .collection-expand,.collection-panel .collection-details .collection-cta{display:none}.collection-panel .collection-mobile-link{display:block;position:absolute;inset:0;z-index:4}.collection-mobile-link:focus-visible{outline:2px solid white;outline-offset:-6px}.collection-panel::after{opacity:1}}
 
 .collection-panel:focus-visible{outline:2px solid var(--green);outline-offset:5px}
+
+.menu-calculator-compact{display:none}a.film-link{display:block;text-decoration:none;color:inherit}@media(min-width:701px) and (max-width:1100px){.menu-calculator-compact{display:flex;font-size:clamp(30px,4vw,48px)}}

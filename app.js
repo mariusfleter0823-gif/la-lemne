@@ -94,7 +94,7 @@ closeMenu.addEventListener('click',()=>requestMenuClose());
 menu.addEventListener('cancel',event=>{event.preventDefault();requestMenuClose()});
 menu.addEventListener('close',()=>{menuTimeline?.pause(0);setMenuPhase('closed');menuToggle.setAttribute('aria-expanded','false');syncDialogState();if(!offer.open)menuToggle.focus({preventScroll:true})});
 document.querySelectorAll('[data-home-link]').forEach(link=>link.addEventListener('click',e=>{e.preventDefault();requestMenuClose(()=>{if(location.pathname==='/la-lemne/'||location.pathname==='/la-lemne/index.html')window.scrollTo({top:0,behavior:reducedMotion.matches?'instant':'smooth'});else location.assign('/la-lemne/');})}));
-document.querySelector('.film-link').addEventListener('click',()=>requestMenuClose(()=>{manuallyPaused=false;tryPlay()}));
+document.querySelector('button.film-link')?.addEventListener('click',()=>requestMenuClose(()=>{manuallyPaused=false;tryPlay()}));
 let offerMotion;
 let offerPhase='closed';
 const offerContent=[...offer.children].filter(el=>el!==offerClose);
