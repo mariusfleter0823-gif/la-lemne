@@ -1,0 +1,433 @@
+.calculator-page{--paper:#f3f8ef;--line:#d5dfd2;--muted:#52695a;--error:#963b27;--radius:14px}
+.calculator-page main{padding-top:var(--header-height)}
+.calculator-page main .wrap{width:calc(100% - var(--page-inset)*2);margin-inline:auto}
+:where(.calculator-page main) button,:where(.calculator-page main) input,:where(.calculator-page main) select{font:inherit;color:inherit}
+:where(.calculator-page main) button,:where(.calculator-page main) a,:where(.calculator-page main) input,:where(.calculator-page main) select,:where(.calculator-page main) summary{-webkit-tap-highlight-color:transparent}
+:where(.calculator-page main) button,:where(.calculator-page main) a,:where(.calculator-page main) summary{touch-action:manipulation}
+:where(.calculator-page main) button,:where(.calculator-page main) summary{cursor:pointer}
+:where(.calculator-page main) button{border:0}
+:where(.calculator-page main) a{color:inherit;text-decoration:none}
+:where(.calculator-page main) p{line-height:1.55}
+:where(.calculator-page main) h1,:where(.calculator-page main) h2,:where(.calculator-page main) h3,:where(.calculator-page main) p{margin-top:0}
+:where(.calculator-page main) button:focus-visible,:where(.calculator-page main) a:focus-visible,:where(.calculator-page main) input:focus-visible,:where(.calculator-page main) select:focus-visible,:where(.calculator-page main) summary:focus-visible{outline:3px solid #427c36;outline-offset:4px}
+:where(.calculator-page main) ::selection{background:var(--leaf);color:var(--green)}
+:where(.calculator-page main) input{caret-color:var(--green)}
+:where(.calculator-page main) svg{display:block}
+:where(.calculator-page main) svg:not(#roof-svg){width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+
+:where(.calculator-page main) .print-button{border:1px solid var(--green);background:transparent;border-radius:999px;min-height:42px;padding:10px 19px;display:inline-flex;gap:20px;align-items:center;justify-content:center;font-size:14px;transition:background .18s}
+:where(.calculator-page main) .print-button:hover{background:var(--pale)}
+:where(.calculator-page main) .print-button svg{width:17px;height:17px}
+:where(.calculator-page main) .intro{padding-top:58px;padding-bottom:43px;display:flex;align-items:flex-end;justify-content:space-between;gap:50px}
+:where(.calculator-page main) h1{font-size:64px;font-weight:350;line-height:1.03;letter-spacing:-.035em;margin:0;max-width:780px;color:var(--green)}
+:where(.calculator-page main) .intro-copy{padding-bottom:5px;max-width:390px;font-size:16px}
+:where(.calculator-page main) .intro-copy p{margin:0 0 16px}
+:where(.calculator-page main) .intro-copy a{font-size:13px;border-bottom:1px solid var(--line);padding-bottom:4px;display:inline-flex;gap:22px}
+:where(.calculator-page main) .intro-copy a:hover{border-color:var(--green)}
+:where(.calculator-page main) .workspace{display:grid;grid-template-columns:348px minmax(0,1fr);gap:24px;align-items:start}
+:where(.calculator-page main) .configuration{border:1px solid var(--line);border-radius:var(--radius);padding:25px 24px 20px}
+:where(.calculator-page main) .panel-heading{display:flex;align-items:center;justify-content:space-between;margin-bottom:23px;gap:12px}
+:where(.calculator-page main) .panel-heading h2{font-size:22px;font-weight:450;letter-spacing:-.025em;margin:0}
+:where(.calculator-page main) .text-button{background:none;padding:7px 0;font-size:12px;color:var(--muted);text-decoration:underline;text-underline-offset:4px}
+:where(.calculator-page main) .text-button:hover{color:var(--green)}
+:where(.calculator-page main) fieldset{border:0;padding:0;margin:0}
+:where(.calculator-page main) legend{padding:0;margin:0 0 11px;font-size:13px}
+:where(.calculator-page main) .shape-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+:where(.calculator-page main) .shape-option{position:relative;border:1px solid var(--line);border-radius:8px;padding:12px 9px;display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;min-height:64px;transition:background .18s,border-color .18s}
+:where(.calculator-page main) .shape-option:has(:checked){background:var(--pale);border-color:var(--green)}
+:where(.calculator-page main) .shape-option:has(:focus-visible){outline:3px solid #427c36;outline-offset:3px}
+:where(.calculator-page main) .shape-option input{position:absolute;opacity:0;width:1px;height:1px}
+:where(.calculator-page main) .shape-option svg{width:44px;height:32px;stroke-width:1.35}
+:where(.calculator-page main) .shape-option svg path:first-child{fill:#ffffff70}
+:where(.calculator-page main) .shape-option:hover{background:var(--paper)}
+:where(.calculator-page main) .form-divider{height:1px;background:var(--line);margin:24px 0 20px}
+:where(.calculator-page main) .label-line{display:flex;justify-content:space-between;gap:10px}
+:where(.calculator-page main) .label-line h3{font-size:14px;font-weight:500;margin:0}
+:where(.calculator-page main) .label-line>span{color:var(--muted);font-size:12px}
+:where(.calculator-page main) .field-help{font-size:12px;line-height:1.5;color:var(--muted);margin:7px 0 16px}
+:where(.calculator-page main) .field-pair{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+:where(.calculator-page main) .field{font-size:13px;display:block}
+:where(.calculator-page main) .dimension-letter{float:right;color:var(--muted);font-style:italic}
+:where(.calculator-page main) .input-shell{display:flex;border:1px solid var(--line);border-radius:6px;background:#fff;align-items:center;gap:5px;margin-top:7px;padding-right:12px;min-height:48px}
+:where(.calculator-page main) .input-shell:focus-within{border-color:var(--green)}
+:where(.calculator-page main) .input-shell input{width:100%;min-width:0;border:0;border-radius:6px;background:transparent;padding:11px 0 11px 13px;font-size:20px;font-variant-numeric:tabular-nums;appearance:textfield;-moz-appearance:textfield;outline:none}
+:where(.calculator-page main) .input-shell input::-webkit-inner-spin-button,:where(.calculator-page main) .input-shell input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+:where(.calculator-page main) .input-shell>span{font-size:13px;color:var(--muted)}
+:where(.calculator-page main) .input-shell:has([aria-invalid=true]){border-color:var(--error)}
+:where(.calculator-page main) .field-error{color:var(--error);font-size:11px;display:block;margin-top:4px;line-height:1.4}
+:where(.calculator-page main) .field-error:empty{display:none}
+:where(.calculator-page main) .pitch-row{display:flex;align-items:center;justify-content:space-between;margin:20px 0 9px;gap:10px;font-size:13px}
+:where(.calculator-page main) .small-input{width:79px;min-height:38px;margin:0}
+:where(.calculator-page main) .small-input input{font-size:17px;padding-block:7px}
+:where(.calculator-page main) input[type=range]{display:block;appearance:none;-webkit-appearance:none;width:100%;height:22px;background:transparent;margin:0;cursor:pointer;accent-color:var(--green)}
+:where(.calculator-page main) input[type=range]::-webkit-slider-runnable-track{height:3px;border-radius:2px;background:var(--line)}
+:where(.calculator-page main) input[type=range]::-webkit-slider-thumb{appearance:none;-webkit-appearance:none;width:17px;height:17px;background:var(--green);border:3px solid var(--paper);box-shadow:0 0 0 1px var(--green);border-radius:50%;margin-top:-7px}
+:where(.calculator-page main) input[type=range]::-moz-range-track{height:3px;background:var(--line)}
+:where(.calculator-page main) input[type=range]::-moz-range-thumb{width:14px;height:14px;border:2px solid var(--paper);border-radius:50%;background:var(--green)}
+:where(.calculator-page main) .range-labels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-top:3px}
+:where(.calculator-page main) .advanced{margin-top:22px;border-top:1px solid var(--line)}
+:where(.calculator-page main) summary{list-style:none}
+:where(.calculator-page main) summary::-webkit-details-marker{display:none}
+:where(.calculator-page main) .advanced>summary{display:flex;align-items:center;justify-content:space-between;font-size:13px;padding:16px 0}
+:where(.calculator-page main) .advanced>summary svg{width:16px;height:16px;transition:transform .18s}
+:where(.calculator-page main) .advanced[open]>summary svg{transform:rotate(180deg)}
+:where(.calculator-page main) .advanced-content>.field,:where(.calculator-page main) .advanced-content>.field-pair{margin-bottom:16px}
+:where(.calculator-page main) select{width:100%;background:#fff;border:1px solid var(--line);border-radius:6px;padding:13px 10px;margin-top:7px;cursor:pointer;font-size:14px}
+:where(.calculator-page main) .material-options legend{font-weight:500}
+:where(.calculator-page main) .material-options label{display:flex;align-items:center;gap:9px;font-size:12px;margin:12px 0}
+:where(.calculator-page main) .material-options input{accent-color:var(--green);width:16px;height:16px;margin:0}
+:where(.calculator-page main) .example-note{display:flex;align-items:flex-start;gap:10px;color:var(--muted);font-size:11px;margin:3px 0 0;line-height:1.5}
+:where(.calculator-page main) .example-note svg{width:17px;height:17px;margin-top:2px}
+:where(.calculator-page main) .visual-panel{min-width:0}
+:where(.calculator-page main) .stage{position:relative;background:var(--paper);border-radius:var(--radius);overflow:hidden;min-height:422px}
+:where(.calculator-page main) .stage-toolbar{position:absolute;left:22px;right:22px;top:20px;display:flex;align-items:center;justify-content:space-between;z-index:1;gap:10px}
+:where(.calculator-page main) .segmented{display:inline-flex;padding:4px;background:#fff;border:1px solid var(--line);border-radius:999px}
+:where(.calculator-page main) .segmented button{padding:8px 15px;border-radius:999px;background:transparent;color:var(--muted);font-size:12px;transition:background .18s,color .18s}
+:where(.calculator-page main) .segmented button[aria-pressed=true]{background:var(--green);color:white}
+:where(.calculator-page main) .segmented button:hover:not([aria-pressed=true]){background:var(--pale)}
+:where(.calculator-page main) .view-label{font-size:11px;color:var(--muted)}
+:where(.calculator-page main) #roof-svg{display:block;width:100%;height:422px;touch-action:pan-y;cursor:grab;user-select:none}
+:where(.calculator-page main) #roof-svg:active{cursor:grabbing}
+:where(.calculator-page main) #roof-svg text{font-family:Aspekta,Arial,sans-serif;font-variant-numeric:tabular-nums}
+:where(.calculator-page main) .stage-bottom{position:absolute;bottom:18px;left:22px;right:22px;display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+:where(.calculator-page main) .drag-hint{display:flex;gap:7px;align-items:center;color:var(--muted);font-size:11px}
+:where(.calculator-page main) .drag-hint svg{width:18px;height:18px}
+:where(.calculator-page main) .view-controls{display:flex;gap:5px;pointer-events:auto}
+:where(.calculator-page main) .view-controls button{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--line);border-radius:50%;background:#fff}
+:where(.calculator-page main) .view-controls button:hover{background:var(--pale)}
+:where(.calculator-page main) .view-controls svg{width:15px;height:15px}
+:where(.calculator-page main) .geometry-results{display:grid;grid-template-columns:repeat(3,1fr);padding:23px 4px 18px;border-bottom:1px solid var(--line)}
+:where(.calculator-page main) .geometry-results>div{padding:0 22px;border-left:1px solid var(--line)}
+:where(.calculator-page main) .geometry-results>div:first-child{padding-left:0;border:0}
+:where(.calculator-page main) .geometry-results span{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+:where(.calculator-page main) .geometry-results strong{display:block;font-size:30px;font-weight:400;letter-spacing:-.03em;font-variant-numeric:tabular-nums;white-space:nowrap}
+:where(.calculator-page main) .geometry-results small{font-size:15px;letter-spacing:0}
+:where(.calculator-page main) .geometry-note{font-size:12px;color:var(--muted);margin:14px 0 0}
+:where(.calculator-page main) .form-status{font-size:13px;color:var(--error);margin-top:12px;min-height:0}
+:where(.calculator-page main) .form-status:empty{display:none}
+.calculator-page.has-errors main .visual-panel,.calculator-page.has-errors main .estimate-layout{opacity:.55}
+.calculator-page.has-errors main .quote-panel a,.calculator-page.has-errors main #print{pointer-events:none}
+:where(.calculator-page main) .materials-section{padding-top:82px;padding-bottom:72px}
+:where(.calculator-page main) .section-title{display:flex;align-items:center;justify-content:space-between;gap:25px;margin-bottom:28px}
+:where(.calculator-page main) .section-title h2{font-size:40px;font-weight:350;letter-spacing:-.035em;line-height:1.1;margin:0 0 12px}
+:where(.calculator-page main) .section-title p{color:var(--muted);font-size:14px;margin:0}
+:where(.calculator-page main) .print-button{border-color:var(--line);gap:10px;white-space:nowrap}
+:where(.calculator-page main) .estimate-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:35px;align-items:start}
+:where(.calculator-page main) .material-list{min-width:0}
+:where(.calculator-page main) .table-head,:where(.calculator-page main) .material-row{display:grid;grid-template-columns:minmax(180px,1.35fr) minmax(135px,1fr) 120px;gap:16px;align-items:center}
+:where(.calculator-page main) .table-head{font-size:11px;color:var(--muted);padding:0 0 15px;border-bottom:1px solid var(--line)}
+:where(.calculator-page main) .table-head>span:last-child{text-align:right}
+:where(.calculator-page main) .material-row{padding:22px 0;border-bottom:1px solid var(--line)}
+:where(.calculator-page main) .material-name{display:flex;align-items:center;gap:14px}
+:where(.calculator-page main) .material-name img{width:53px;height:58px;object-fit:cover;border-radius:4px}
+:where(.calculator-page main) .material-name strong{display:block;font-size:14px;font-weight:500;line-height:1.35}
+:where(.calculator-page main) .material-name a{display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);margin-top:5px;border-bottom:1px solid var(--line)}
+:where(.calculator-page main) .material-name a:hover{color:var(--green);border-color:var(--green)}
+:where(.calculator-page main) .material-name a svg{width:12px;height:12px}
+:where(.calculator-page main) .quantity strong{font-size:16px;font-weight:450;display:block;font-variant-numeric:tabular-nums}
+:where(.calculator-page main) .quantity span{display:block;font-size:11px;color:var(--muted);line-height:1.4;margin-top:4px}
+:where(.calculator-page main) .material-cost{text-align:right;font-size:14px;font-variant-numeric:tabular-nums}
+:where(.calculator-page main) .material-cost small{display:block;font-size:11px;color:var(--muted);margin-top:4px}
+:where(.calculator-page main) .stock-note{font-size:11px;line-height:1.6;color:var(--muted);margin:17px 0 19px;max-width:75ch}
+:where(.calculator-page main) .calculation-details>summary{font-size:12px;display:flex;gap:16px;align-items:center;justify-content:space-between;line-height:1.5;padding:8px 0}
+:where(.calculator-page main) .calculation-details>summary>span{font-size:20px;font-weight:300}
+:where(.calculator-page main) .calculation-details[open]>summary>span{transform:rotate(45deg)}
+:where(.calculator-page main) .calculation-details p{font-size:12px;color:var(--muted);max-width:75ch}
+:where(.calculator-page main) .calculation-details>div{padding-top:10px}
+:where(.calculator-page main) .quote-panel{background:var(--green);color:white;border-radius:var(--radius);padding:28px 24px 23px}
+:where(.calculator-page main) .quote-panel h3{font-size:15px;font-weight:400;line-height:1.5;margin:0 0 8px}
+:where(.calculator-page main) .volume-total{font-size:49px;font-weight:350;letter-spacing:-.035em;margin:0 0 21px;line-height:1.15;font-variant-numeric:tabular-nums}
+:where(.calculator-page main) .volume-total span{font-size:23px;letter-spacing:0}
+:where(.calculator-page main) .quote-price{padding-top:20px;border-top:1px solid #ffffff38}
+:where(.calculator-page main) .quote-price>span{display:block;font-size:12px;color:#c7dacb;margin-bottom:8px}
+:where(.calculator-page main) .quote-price strong{font-size:25px;font-weight:400;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+:where(.calculator-page main) .quote-price small{display:block;color:#c7dacb;font-size:11px;margin:5px 0 22px}
+:where(.calculator-page main) .primary-button{display:flex;align-items:center;justify-content:center;gap:9px;background:var(--leaf);color:var(--green);border-radius:6px;padding:15px 10px;font-size:12px;font-weight:500;min-height:49px;transition:background .18s}
+:where(.calculator-page main) .primary-button:hover{background:#afd9a6}
+:where(.calculator-page main) .primary-button>svg{width:14px;height:14px;margin-left:auto}
+:where(.calculator-page main) .quote-help{font-size:10px;text-align:center;color:#c7dacb;margin:10px 0 21px}
+:where(.calculator-page main) .phone-link{display:flex;gap:9px;justify-content:center;align-items:center;font-size:11px}
+:where(.calculator-page main) .phone-link img{filter:brightness(0) invert(1)}
+:where(.calculator-page main) .phone-link:hover{text-decoration:underline;text-underline-offset:4px}
+:where(.calculator-page main) .scope-note{display:flex;align-items:flex-start;gap:15px;background:var(--paper);border-radius:8px;padding:20px 24px;margin-top:30px;max-width:100%}
+:where(.calculator-page main) .scope-note svg{margin-top:2px}
+:where(.calculator-page main) .scope-note strong{font-size:13px;font-weight:500}
+:where(.calculator-page main) .scope-note p{font-size:12px;color:var(--muted);margin:5px 0 0;max-width:115ch}
+:where(.calculator-page main) .no-script{padding:20px;background:var(--pale);text-align:center}
+@media(min-width:1450px){:where(.calculator-page main) .workspace{grid-template-columns:380px minmax(0,1fr);gap:28px}
+:where(.calculator-page main) .configuration{padding-inline:28px}
+:where(.calculator-page main) .stage,:where(.calculator-page main) #roof-svg{min-height:448px;height:448px}
+:where(.calculator-page main) .intro{padding-top:65px;padding-bottom:49px}
+:where(.calculator-page main) h1{font-size:72px}
+:where(.calculator-page main) .estimate-layout{grid-template-columns:minmax(0,1fr) 340px;gap:48px}
+:where(.calculator-page main) .material-row{padding-block:26px}
+:where(.calculator-page main) .primary-button{font-size:13px}
+}
+@media(max-width:1100px){
+:where(.calculator-page main) .intro{gap:32px;padding-top:45px}
+:where(.calculator-page main) h1{font-size:55px}
+:where(.calculator-page main) .intro-copy{font-size:14px;max-width:320px}
+:where(.calculator-page main) .workspace{grid-template-columns:310px minmax(0,1fr);gap:18px}
+:where(.calculator-page main) .configuration{padding-inline:18px}
+:where(.calculator-page main) .shape-option{gap:5px}
+:where(.calculator-page main) .shape-option svg{width:40px}
+:where(.calculator-page main) .stage,:where(.calculator-page main) #roof-svg{height:415px;min-height:415px}
+:where(.calculator-page main) .stage-toolbar{left:15px;right:15px}
+:where(.calculator-page main) .geometry-results>div{padding-inline:12px}
+:where(.calculator-page main) .geometry-results span{font-size:10px}
+:where(.calculator-page main) .geometry-results strong{font-size:26px}
+:where(.calculator-page main) .estimate-layout{grid-template-columns:minmax(0,1fr) 285px;gap:24px}
+:where(.calculator-page main) .table-head,:where(.calculator-page main) .material-row{grid-template-columns:minmax(150px,1.3fr) minmax(105px,1fr) 93px;gap:10px}
+:where(.calculator-page main) .material-name img{width:41px;height:50px}
+:where(.calculator-page main) .material-name{gap:9px}
+:where(.calculator-page main) .material-name strong{font-size:12px}
+:where(.calculator-page main) .quantity strong{font-size:14px}
+:where(.calculator-page main) .material-cost{font-size:12px}
+:where(.calculator-page main) .quote-panel{padding:25px 20px}
+}
+@media(max-width:800px){:where(.calculator-page main) .intro{display:block;padding-top:34px;padding-bottom:28px}
+:where(.calculator-page main) h1{font-size:49px}
+:where(.calculator-page main) .intro-copy{max-width:none;margin-top:19px}
+:where(.calculator-page main) .intro-copy p{margin-bottom:0}
+:where(.calculator-page main) .intro-copy>a{display:none}
+:where(.calculator-page main) .workspace{grid-template-columns:1fr;gap:20px}
+:where(.calculator-page main) .configuration{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;padding:23px}
+:where(.calculator-page main) .panel-heading{grid-column:1/-1}
+:where(.calculator-page main) .shape-field{grid-row:2/5}
+:where(.calculator-page main) .form-divider{display:none}
+:where(.calculator-page main) .label-line{grid-column:2}
+:where(.calculator-page main) .field-help{grid-column:2}
+:where(.calculator-page main) .field-pair{grid-column:2}
+:where(.calculator-page main) .pitch-row{grid-column:1;grid-row:5}
+:where(.calculator-page main) #pitch-range{grid-column:1;grid-row:6}
+:where(.calculator-page main) .range-labels{grid-column:1;grid-row:7}
+:where(.calculator-page main) .advanced{grid-column:2;grid-row:5/9;margin-top:20px}
+:where(.calculator-page main) .advanced-content .field-pair{display:grid}
+:where(.calculator-page main) .example-note{grid-column:1;margin-top:19px}
+:where(.calculator-page main) .visual-panel{display:block}
+:where(.calculator-page main) .stage,:where(.calculator-page main) #roof-svg{height:420px;min-height:420px}
+:where(.calculator-page main) .geometry-results strong{font-size:29px}
+:where(.calculator-page main) .geometry-results span{font-size:12px}
+:where(.calculator-page main) .estimate-layout{grid-template-columns:1fr}
+:where(.calculator-page main) .quote-panel{display:grid;grid-template-columns:1fr 1fr;gap:0 24px;padding:26px}
+:where(.calculator-page main) .quote-panel h3{grid-column:1;margin-bottom:4px}
+:where(.calculator-page main) .quote-panel h3 br{display:none}
+:where(.calculator-page main) .volume-total{grid-column:1;grid-row:2/4;margin-bottom:0}
+:where(.calculator-page main) .quote-price{grid-column:2;grid-row:1/4;border:0;padding:0}
+:where(.calculator-page main) .quote-price small{margin-bottom:0}
+:where(.calculator-page main) .primary-button{grid-column:1/-1;margin-top:20px;font-size:14px}
+:where(.calculator-page main) .primary-button>svg{margin-left:8px}
+:where(.calculator-page main) .quote-help{grid-column:1/-1;margin-bottom:16px}
+:where(.calculator-page main) .phone-link{grid-column:1/-1}
+:where(.calculator-page main) .table-head,:where(.calculator-page main) .material-row{grid-template-columns:minmax(180px,1.4fr) 1fr 110px;gap:15px}
+:where(.calculator-page main) .material-name img{width:53px;height:58px}
+:where(.calculator-page main) .material-name strong{font-size:14px}
+:where(.calculator-page main) .quantity strong{font-size:16px}
+:where(.calculator-page main) .material-cost{font-size:14px}
+:where(.calculator-page main) .materials-section{padding-top:58px;padding-bottom:50px}
+:where(.calculator-page main) .section-title h2{font-size:34px}
+:where(.calculator-page main) .section-title{align-items:flex-start}
+:where(.calculator-page main) .section-title .pill{font-size:12px;padding:9px 13px}
+}
+@media(max-width:520px){
+:where(.calculator-page main) h1{font-size:40px;line-height:1.06}
+:where(.calculator-page main) .intro{padding-top:30px;padding-bottom:26px}
+:where(.calculator-page main) .intro-copy{font-size:14px;margin-top:16px}
+:where(.calculator-page main) .intro-copy br{display:none}
+:where(.calculator-page main) .configuration{display:block;padding:21px 19px}
+:where(.calculator-page main) .panel-heading{margin-bottom:20px}
+:where(.calculator-page main) .panel-heading h2{font-size:21px}
+:where(.calculator-page main) .shape-options{gap:11px}
+:where(.calculator-page main) .shape-option{padding:10px 13px;justify-content:center;gap:11px;font-size:13px}
+:where(.calculator-page main) .form-divider{display:block;margin-block:19px}
+:where(.calculator-page main) .field-help{margin-bottom:15px}
+:where(.calculator-page main) .pitch-row{margin-top:19px}
+:where(.calculator-page main) .advanced{margin-top:18px}
+:where(.calculator-page main) .example-note{margin-top:3px}
+:where(.calculator-page main) .example-note br{display:none}
+:where(.calculator-page main) .stage,:where(.calculator-page main) #roof-svg{height:330px;min-height:330px}
+:where(.calculator-page main) .stage-toolbar{top:14px;left:14px;right:14px}
+:where(.calculator-page main) .segmented{padding:3px}
+:where(.calculator-page main) .segmented button{font-size:11px;padding:7px 11px}
+:where(.calculator-page main) .view-label{font-size:10px}
+:where(.calculator-page main) .stage-bottom{left:14px;right:14px;bottom:14px}
+:where(.calculator-page main) .drag-hint{font-size:10px;gap:4px}
+:where(.calculator-page main) .drag-hint svg{width:14px;height:14px}
+:where(.calculator-page main) .view-controls button{width:32px;height:32px}
+:where(.calculator-page main) .geometry-results{padding-top:20px;padding-bottom:16px;gap:0}
+:where(.calculator-page main) .geometry-results>div{padding:0 10px}
+:where(.calculator-page main) .geometry-results span{font-size:10px;min-height:28px;line-height:1.4;max-width:100px;margin-bottom:3px}
+:where(.calculator-page main) .geometry-results strong{font-size:25px}
+:where(.calculator-page main) .geometry-results small{font-size:12px}
+:where(.calculator-page main) .geometry-note{font-size:11px;line-height:1.5}
+:where(.calculator-page main) .materials-section{padding-top:45px}
+:where(.calculator-page main) .section-title{display:block;margin-bottom:20px}
+:where(.calculator-page main) .section-title h2{font-size:31px}
+:where(.calculator-page main) .section-title p{font-size:12px}
+:where(.calculator-page main) .print-button{margin-top:17px}
+:where(.calculator-page main) .table-head{display:none}
+:where(.calculator-page main) .material-row{position:relative;grid-template-columns:minmax(0,1fr) 105px;gap:12px;padding:20px 0}
+:where(.calculator-page main) .material-row:first-child{border-top:1px solid var(--line)}
+:where(.calculator-page main) .material-name{grid-column:1/-1;gap:12px}
+:where(.calculator-page main) .material-name img{width:48px;height:52px}
+:where(.calculator-page main) .material-name strong{font-size:14px}
+:where(.calculator-page main) .material-name a{font-size:11px}
+:where(.calculator-page main) .quantity{grid-column:1;padding-left:60px}
+:where(.calculator-page main) .quantity strong{font-size:15px}
+:where(.calculator-page main) .quantity span{font-size:10px}
+:where(.calculator-page main) .material-cost{align-self:start;font-size:14px;padding-top:1px}
+:where(.calculator-page main) .material-cost small{font-size:10px}
+:where(.calculator-page main) .estimate-layout{gap:22px}
+:where(.calculator-page main) .quote-panel{padding:25px 22px;gap:0 20px}
+:where(.calculator-page main) .quote-panel h3{font-size:12px;max-width:135px}
+:where(.calculator-page main) .volume-total{font-size:40px;margin-top:6px}
+:where(.calculator-page main) .volume-total span{font-size:18px}
+:where(.calculator-page main) .quote-price>span{font-size:11px}
+:where(.calculator-page main) .quote-price strong{font-size:21px}
+:where(.calculator-page main) .quote-price small{font-size:10px}
+:where(.calculator-page main) .primary-button{font-size:12px}
+:where(.calculator-page main) .quote-help{font-size:10px}
+:where(.calculator-page main) .scope-note{padding:18px 16px;gap:10px;margin-top:23px}
+:where(.calculator-page main) .scope-note svg{width:17px;height:17px}
+:where(.calculator-page main) .scope-note strong{font-size:12px}
+:where(.calculator-page main) .scope-note p{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){:where(.calculator-page main) *::before,:where(.calculator-page main) *::after{transition:none!important;animation:none!important}
+}
+@media print{@page{margin:15mm}:where(.calculator-page main) .configuration,:where(.calculator-page main) .intro-copy,:where(.calculator-page main) .stage-toolbar,:where(.calculator-page main) .stage-bottom,:where(.calculator-page main) .print-button,:where(.calculator-page main) .quote-help,:where(.calculator-page main) .phone-link,:where(.calculator-page main) .primary-button,:where(.calculator-page main) .form-status,:where(.calculator-page main) .calculation-details{display:none!important}
+
+:where(.calculator-page main) .intro{padding:0 0 16px}
+:where(.calculator-page main) h1{font-size:30pt}
+:where(.calculator-page main) .workspace{display:block}
+:where(.calculator-page main) .stage{height:210px;min-height:210px;background:#fff}
+:where(.calculator-page main) .stage #roof-svg{height:210px;min-height:210px}
+:where(.calculator-page main) .geometry-results{padding:12px 0}
+:where(.calculator-page main) .geometry-results strong{font-size:20pt}
+:where(.calculator-page main) .geometry-results span{font-size:10pt}
+:where(.calculator-page main) .materials-section{padding:25px 0 0}
+:where(.calculator-page main) .section-title h2{font-size:23pt}
+:where(.calculator-page main) .estimate-layout{display:block}
+:where(.calculator-page main) .quote-panel{margin-top:20px;background:#fff;color:var(--green);border:1px solid var(--line);display:flex;gap:25px;align-items:center;break-inside:avoid}
+:where(.calculator-page main) .quote-panel h3{margin:0}
+:where(.calculator-page main) .volume-total{font-size:28pt;margin:0}
+:where(.calculator-page main) .quote-price{border:0;padding:0}
+:where(.calculator-page main) .quote-price span,:where(.calculator-page main) .quote-price small{color:var(--muted)}
+:where(.calculator-page main) .quote-price small{margin-bottom:0}
+:where(.calculator-page main) .scope-note{break-inside:avoid}
+:where(.calculator-page main) .material-row{break-inside:avoid}
+:where(.calculator-page main) .table-head,:where(.calculator-page main) .material-row{grid-template-columns:1.5fr 1fr 130px}
+:where(.calculator-page main) .material-cost{font-size:11pt}
+:where(.calculator-page main) .material-name strong{font-size:11pt}
+:where(.calculator-page main) .quantity strong{font-size:12pt}
+:where(.calculator-page main) .quantity span,:where(.calculator-page main) .stock-note,:where(.calculator-page main) .scope-note p{font-size:9pt}
+:where(.calculator-page main) a{color:var(--green)}
+:where(.calculator-page main) .quote-panel:after{content:'La Lemne · +40 746 820 092';font-size:9pt}
+:where(.calculator-page main) .geometry-note{font-size:9pt}
+}
+:where(.calculator-page main) .input-shell:focus-within{outline:2px solid var(--green);outline-offset:2px}
+:where(.calculator-page main) button:disabled{opacity:.5;cursor:not-allowed}
+:where(.calculator-page main) .intro-copy>a{align-items:center}
+:where(.calculator-page main) .intro-copy>a>svg{width:14px;height:14px}
+:where(.calculator-page main) .calculation-details>summary>span{display:inline-flex;transition:transform .18s}
+:where(.calculator-page main) .calculation-details>summary>span>svg{width:18px;height:18px}
+:where(.calculator-page main) .supplier-notice{background:#b4232c;color:#fff;padding:20px 24px;margin-bottom:26px;border-radius:8px;display:flex;gap:32px;align-items:center}
+:where(.calculator-page main) .supplier-notice strong{font-size:18px;line-height:1.35;font-weight:550;max-width:29ch;flex:0 0 32%}
+:where(.calculator-page main) .supplier-notice p{font-size:13px;line-height:1.6;margin:0;max-width:76ch}
+:where(.calculator-page main) .supplier-notice ::selection{background:#fff;color:var(--error)}
+:where(.calculator-page main) .shape-options{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+:where(.calculator-page main) .shape-option{flex-direction:column;justify-content:center;padding:10px 4px;gap:5px;font-size:12px;min-width:0}
+:where(.calculator-page main) .shape-option svg{width:54px;height:36px}
+:where(.calculator-page main) .shape-help{font-size:11px;line-height:1.5;color:var(--muted);margin:11px 0 0}
+:where(.calculator-page main) .field[hidden]{display:none}
+@media(max-width:800px){:where(.calculator-page main) .supplier-notice{gap:20px}
+:where(.calculator-page main) .supplier-notice strong{font-size:16px;flex-basis:40%}
+:where(.calculator-page main) .supplier-notice p{font-size:12px}
+}
+@media(max-width:520px){:where(.calculator-page main) .supplier-notice{display:block;padding:19px 20px;margin-bottom:20px}
+:where(.calculator-page main) .supplier-notice strong{display:block;max-width:26ch;font-size:18px}
+:where(.calculator-page main) .supplier-notice p{margin-top:9px;font-size:12px}
+:where(.calculator-page main) .shape-options{gap:7px}
+:where(.calculator-page main) .shape-option{padding:10px 4px;gap:5px;font-size:12px}
+:where(.calculator-page main) .shape-option svg{width:48px}
+}
+@media print{:where(.calculator-page main) .supplier-notice{background:#fff;color:#963b27;border:1px solid #963b27;padding:12px;display:block;margin-bottom:16px;break-inside:avoid}
+:where(.calculator-page main) .supplier-notice strong{font-size:12pt;max-width:none}
+:where(.calculator-page main) .supplier-notice p{font-size:10pt;max-width:none;margin-top:5px}
+}
+:where(.calculator-page main) .stage,:where(.calculator-page main) #roof-svg{height:510px;min-height:510px}
+:where(.calculator-page main) .layer-panel{padding:17px 0 0}
+:where(.calculator-page main) .layer-toggles{display:flex;gap:10px;flex-wrap:wrap}
+:where(.calculator-page main) .layer-toggles label{display:flex;align-items:center;gap:7px;cursor:pointer;border:1px solid var(--line);border-radius:6px;padding:9px 11px;font-size:12px;min-height:36px;background:#fff}
+:where(.calculator-page main) .layer-toggles label:has(:checked){background:var(--paper)}
+:where(.calculator-page main) .layer-toggles label:has(:disabled){color:var(--muted);opacity:.5;cursor:default}
+:where(.calculator-page main) .layer-toggles input{width:14px;height:14px;accent-color:var(--green);margin:0}
+:where(.calculator-page main) .layer-toggles label[data-layer=rafters]{--layer-ink:#466740}
+:where(.calculator-page main) .layer-toggles label[data-layer=boards]{--layer-ink:#7c8b68}
+:where(.calculator-page main) .layer-toggles label[data-layer=counter]{--layer-ink:#355d3e}
+:where(.calculator-page main) .layer-toggles label[data-layer=battens]{--layer-ink:#627841}
+:where(.calculator-page main) .layer-toggles input{accent-color:var(--layer-ink)}
+:where(.calculator-page main) .layer-toggles label:has(:focus-visible){outline:2px solid var(--green);outline-offset:3px}
+:where(.calculator-page main) .layer-panel p{font-size:11px;color:var(--muted);line-height:1.5;margin:10px 0 0;max-width:85ch}
+:where(.calculator-page main) .geometry-results{padding-top:20px}
+@media(max-width:1100px){:where(.calculator-page main) .stage,:where(.calculator-page main) #roof-svg{height:490px;min-height:490px}
+:where(.calculator-page main) .layer-toggles{gap:7px}
+:where(.calculator-page main) .layer-toggles label{padding:8px;font-size:11px}
+:where(.calculator-page main) .stage-toolbar .segmented button{padding-inline:12px}
+:where(.calculator-page main) .view-label{display:none}
+}
+@media(max-width:520px){:where(.calculator-page main) .stage,:where(.calculator-page main) #roof-svg{height:420px;min-height:420px}
+:where(.calculator-page main) .stage-toolbar{justify-content:center}
+:where(.calculator-page main) .stage-toolbar .segmented button{padding:8px 14px;font-size:11px}
+:where(.calculator-page main) .layer-toggles{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+:where(.calculator-page main) .layer-toggles label{padding:11px;font-size:12px;min-height:41px}
+:where(.calculator-page main) .layer-panel p{font-size:11px}
+}
+@media print{:where(.calculator-page main) .stage,:where(.calculator-page main) #roof-svg{height:280px;min-height:280px}
+:where(.calculator-page main) .layer-toggles{display:none}
+:where(.calculator-page main) .layer-panel{padding-top:0}
+:where(.calculator-page main) .layer-panel p{font-size:9pt}
+}
+:where(.calculator-page main) .shape-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+:where(.calculator-page main) .shape-option{flex-direction:row;gap:8px}
+:where(.calculator-page main) .lshape-fields{margin-top:15px}
+:where(.calculator-page main) .lshape-fields[hidden]{display:none}
+:where(.calculator-page main) .lshape-plan{margin:12px 0 22px;padding:12px;background:var(--paper);border-radius:8px}
+:where(.calculator-page main) #lshape-fields .lshape-plan svg{width:100%;height:115px;stroke:var(--muted);stroke-width:1}
+:where(.calculator-page main) .lshape-plan .plan-fill{fill:var(--pale);stroke:var(--green)}
+:where(.calculator-page main) .lshape-plan text{fill:var(--green);stroke:none;font-size:12px;text-anchor:middle}
+:where(.calculator-page main) .lshape-plan p{font-size:11px;color:var(--muted);line-height:1.5;margin:8px 0 0}
+:where(.calculator-page main) .lshape-plan strong{font-weight:550}
+@media(min-width:521px) and (max-width:800px){:where(.calculator-page main) .configuration.is-lshape{display:block}
+:where(.calculator-page main) .is-lshape .field-pair{display:grid;grid-template-columns:1fr 1fr}
+:where(.calculator-page main) .is-lshape .shape-options{grid-template-columns:repeat(4,minmax(0,1fr))}
+:where(.calculator-page main) .is-lshape .shape-option{flex-direction:column}
+:where(.calculator-page main) .is-lshape .lshape-plan{display:flex;align-items:center;gap:18px}
+:where(.calculator-page main) #lshape-fields .lshape-plan svg{width:180px}
+:where(.calculator-page main) .is-lshape .advanced{margin-top:20px}
+}
+:where(.calculator-page main) .wing-heading{font-size:12px;font-weight:600;margin:0 0 10px}
+:where(.calculator-page main) .wing-heading[hidden]{display:none}
+:where(.calculator-page main) #lshape-fields .lshape-plan svg{height:135px}
+:where(.calculator-page main) .lshape-plan text{font-size:11px}
+:where(.calculator-page main) #lshape-fields .lshape-plan text{font-size:12px}
+@media(min-width:521px) and (max-width:800px){:where(.calculator-page main) .is-lshape .label-line{margin-top:20px}
+:where(.calculator-page main) #lshape-fields .lshape-plan svg{width:230px}
+}
+.calculator-page .faq-section{background:var(--paper)}
+.calculator-page .faq-section h2{width:100%;max-width:none}
+.calculator-page .faq-list{width:100%;margin:48px 0 0}
+.calculator-page .faq-answer p{font-size:16px;max-width:90ch}
+.calculator-page .faq-answer a{text-decoration:underline;text-underline-offset:3px}
+.calculator-page .faq-answer strong{font-weight:550}
+.calculator-page main .faq-example-table{font-size:16px;margin-bottom:28px}
+.calculator-page main .faq-example-table caption{font-size:16px}
+.calculator-page .faq-example-table{width:100%;table-layout:fixed;border-collapse:collapse;line-height:1.5;font-variant-numeric:tabular-nums}
+.calculator-page .faq-example-table caption{text-align:left;color:var(--muted);margin-bottom:12px}
+.calculator-page .faq-example-table th,.calculator-page .faq-example-table td{padding:11px 6px;text-align:right;border-bottom:1px solid var(--line);vertical-align:middle}
+.calculator-page .faq-example-table th{font-weight:500}
+.calculator-page .faq-example-table th:first-child{text-align:left;width:36%;padding-left:0}
+.calculator-page .faq-example-table thead th{vertical-align:bottom}
+.calculator-page .faq-example-table .example-total th,.calculator-page .faq-example-table .example-total td{font-weight:600;border-top:1px solid var(--green);border-bottom:0;padding-top:15px}
+.calculator-page #faq-exemple-continut{scroll-margin-top:180px}
+@media(max-width:700px){.calculator-page .faq-list{margin-top:32px}.calculator-page .faq-section h2 br{display:none}.calculator-page main .faq-example-table th,.calculator-page main .faq-example-table td{padding-inline:3px}}
+@media print{.calculator-page main{padding-top:0}.calculator-page .site-header,.calculator-page .site-footer,.calculator-page .faq-section,.calculator-page #cookie-banner{display:none!important}}

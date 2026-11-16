@@ -24,6 +24,10 @@ Contact public: +40 746 820 092, contact@lalemne.ro. Adresă: Strada Drumul Mori
 - [Lambriu](https://lalemne.ro/lambriu): Lungime de 4 m, lățimi de 96 și 140 mm, grosimi de 12,5 și 18 mm; vânzare la m².
 - [Pazie](https://lalemne.ro/pazie): Lățimi de 19 și 24 cm, grosime de 2 cm, lungime de 4 m.
 
+## Calculatoare
+
+- [Calculator lemn pentru acoperiș](https://lalemne.ro/calculator-lemn-acoperis): Estimare orientativă pentru una, două, patru ape și formă L, cu desen 3D și exemple pentru 100, 150 și 200 m². Lista de materiale este parțială; calculatorul nu dimensionează structura și nu înlocuiește proiectul.
+
 ## Companie și contact
 
 - [La Lemne](https://lalemne.ro/): Prezentarea firmei, produse pentru acoperișuri, terase și elevații, condițiile transportului și întrebări frecvente.

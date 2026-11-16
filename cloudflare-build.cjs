@@ -12,7 +12,7 @@ fs.cpSync(path.join(root, 'assets'), path.join(out, 'assets'), { recursive: true
 const pages = [];
 const htmlFiles = [];
 for (const name of fs.readdirSync(root)) {
-  if (!/\.(html|css|js|json|txt)$/.test(name)) continue;
+  if (!/\.(html|css|js|mjs|json|txt)$/.test(name)) continue;
   let text = fs.readFileSync(path.join(root, name), 'utf8').replaceAll('/la-lemne/', '/');
   if (name.endsWith('.html')) {
     htmlFiles.push(name);
