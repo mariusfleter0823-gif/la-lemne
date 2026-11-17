@@ -1,7 +1,7 @@
-export const DEFAULTS = Object.freeze({ shape: 'gable', length: 12, width: 8, wingLength: 14, wingWidth: 8, rightWingLength: 12, rightWingWidth: 4, pitch: 35, waste: 10, spacing: 80, section: '8x15', hipSection: '15x20', valleySection: '15x20', battenSpacing: 35, boards: true, battens: true, counter: true });
-export const SHAPES = { mono: 'într-o apă', gable: 'în două ape egale', hip: 'în patru ape egale ca pantă', lshape: 'în L, cu două aripi și aceeași pantă', ushape: 'în U, cu trei corpuri și aceeași pantă' };
+export const DEFAULTS = Object.freeze({ shape: 'gable', length: 12, width: 8, wingLength: 14, wingWidth: 8, rightWingLength: 12, rightWingWidth: 4, wingOffset: 2, pitch: 35, waste: 10, spacing: 80, section: '8x15', hipSection: '15x20', valleySection: '15x20', battenSpacing: 35, boards: true, battens: true, counter: true });
+export const SHAPES = { mono: 'într-o apă', gable: 'în două ape egale', hip: 'în patru ape egale ca pantă', lshape: 'în L, cu două aripi și aceeași pantă', ushape: 'în U, cu trei corpuri și aceeași pantă', tshape: 'în T, cu două corpuri și aceeași pantă' };
 export const SECTIONS = ['8x10', '8x15', '10x10', '10x12', '10x15', '10x20', '12x12', '15x15', '15x20', '15x25', '20x20'];
-export const LIMITS = { length: [2, 40], width: [2, 20], wingLength: [2, 50], wingWidth: [2, 20], rightWingLength: [2, 50], rightWingWidth: [2, 20], pitch: [5, 60], waste: [0, 25], spacing: [30, 120], battenSpacing: [15, 50] };
+export const LIMITS = { length: [2, 40], width: [2, 20], wingLength: [2, 50], wingWidth: [2, 20], rightWingLength: [2, 50], rightWingWidth: [2, 20], wingOffset: [1, 37], pitch: [5, 60], waste: [0, 25], spacing: [30, 120], battenSpacing: [15, 50] };
 const EPS = 1e-9, ceil = n => Math.ceil(n - EPS);
 export function restoreSettings(saved) {
   const { extension, ...current } = saved || {};
@@ -11,10 +11,10 @@ export function restoreSettings(saved) {
 }
 export function validate(v) {
   const errors = {};
-  for (const [key, [min, max]] of Object.entries(LIMITS)) if ((!['wingLength','wingWidth','rightWingLength','rightWingWidth'].includes(key) || (['wingLength','wingWidth'].includes(key) ? ['lshape','ushape'].includes(v.shape) : v.shape === 'ushape')) && (!Number.isFinite(v[key]) || v[key] < min || v[key] > max)) errors[key] = `Introdu o valoare între ${min} și ${max}.`;
+  for (const [key, [min, max]] of Object.entries(LIMITS)) if ((!['wingLength','wingWidth','rightWingLength','rightWingWidth','wingOffset'].includes(key) || (['wingLength','wingWidth'].includes(key) ? ['lshape','ushape','tshape'].includes(v.shape) : key === 'wingOffset' ? v.shape === 'tshape' : v.shape === 'ushape')) && (!Number.isFinite(v[key]) || v[key] < min || v[key] > max)) errors[key] = `Introdu o valoare între ${min} și ${max}.`;
   if (!Object.hasOwn(SHAPES, v.shape)) errors.shape = 'Alege o formă de acoperiș.';
   if (!SECTIONS.includes(v.section)) errors.section = 'Alege o secțiune din listă.';
-  if (['hip','lshape','ushape'].includes(v.shape) && !SECTIONS.includes(v.hipSection)) errors.hipSection = 'Alege secțiunea căpriorilor diagonali.';
+  if (['hip','lshape','ushape','tshape'].includes(v.shape) && !SECTIONS.includes(v.hipSection)) errors.hipSection = 'Alege secțiunea căpriorilor diagonali.';
   if (v.shape === 'lshape') {
     const minA = Math.max(v.wingWidth + 1, v.width / 2 + 1), minB = Math.max(v.width + 1, v.wingWidth / 2 + 1);
     if (!errors.length && Number.isFinite(minA) && v.length < minA) errors.length = `Lungimea A trebuie să fie de minimum ${Math.ceil(minA * 10) / 10} m pentru acest racord în L.`;
@@ -30,11 +30,24 @@ export function validate(v) {
     }
     if (!SECTIONS.includes(v.valleySection)) errors.valleySection = 'Alege secțiunea grinzilor de dolie.';
   }
+  if (v.shape === 'tshape') {
+    if (!errors.length && v.length < v.wingWidth+2) errors.length = `Lungimea A trebuie să depășească lățimea B cu minimum 2 m, pentru cele două brațe ale T-ului.`;
+    if (!errors.wingOffset && v.wingOffset > v.length-v.wingWidth-1) errors.wingOffset = `Lasă minimum 1 m între aripa B și fiecare capăt al corpului A. Poziția maximă este ${Math.max(0,v.length-v.wingWidth-1)} m.`;
+    if (!errors.wingLength && v.wingLength < Math.max(v.width+1,v.wingWidth/2+1)) errors.wingLength = `Lungimea B trebuie să fie de minimum ${Math.max(v.width+1,v.wingWidth/2+1)} m, inclusiv corpul A.`;
+    if (!SECTIONS.includes(v.valleySection)) errors.valleySection = 'Alege secțiunea grinzilor de dolie.';
+  }
   return errors;
 }
 export function geometry(v) {
   const errors = validate(v);
   if (Object.keys(errors).length) throw new RangeError(JSON.stringify(errors));
+  if (v.shape === 'tshape') {
+    const angle=v.pitch*Math.PI/180,cos=Math.cos(angle),sin=Math.sin(angle),tan=Math.tan(angle),run=Math.max(v.width,v.wingWidth)/2,low=Math.min(v.width,v.wingWidth)/2;
+    const plan=v.length*v.width+v.wingWidth*(v.wingLength-v.width),factor=Math.sqrt(2+tan*tan);
+    return {slopes:4,run,rafter:run/cos,rise:run*tan,cos,sin,plan,area:plan/cos,pitchPercent:tan*100,riseA:v.width/2*tan,riseB:v.wingWidth/2*tan,
+      ridge:v.wingWidth<=v.width?v.length+v.wingLength-v.width+v.wingWidth/2:v.length-v.wingWidth+v.width+v.wingLength-v.wingWidth/2,
+      hipLength:0,valleyLength:2*low*factor,transitionLength:Math.max(0,(v.wingWidth-v.width)/2)*factor};
+  }
   if (v.shape === 'ushape') {
     const [left,right] = uParts(v), a = geometry(left), b = geometry(right);
     const plan = v.length*v.width + v.wingWidth*(v.wingLength-v.width) + v.rightWingWidth*(v.rightWingLength-v.width);
@@ -70,6 +83,7 @@ function grid(anchors, maximum) {
   return points;
 }
 export function roofLayout(v, g = geometry(v)) {
+  if (v.shape === 'tshape') return tRoofLayout(v,g);
   if (v.shape === 'ushape') return uRoofLayout(v);
   if (v.shape === 'lshape') return lRoofLayout(v, g);
   const L = v.length, W = v.width, hip = v.shape === 'hip';
@@ -119,6 +133,20 @@ function lRoofLayout(v, g) {
   if(a>b)patch(2,b/2,a/2,0,A,0,1);
   patch(3,0,lo,0,B-a,-1,0);
   if(b>a)patch(3,a/2,b/2,-a,B-a,1,0);
+  const {rafters,battens,battenRows,actualSpacing}=patchMembers(v,g,faces);
+  const high=point(hi,hi,g.rise),low=a>=b?point(b/2,a-b/2,lo*g.sin/c):point(b-a/2,a/2,lo*g.sin/c);
+  const indices=groups=>groups.map(group=>faces.findIndex(f=>f.group===group));
+  const hips=[{a:point(0,0),b:high,length:g.hipLength,faces:indices([0,1])}];
+  if(g.transitionLength>EPS)hips.push({a:low,b:high,length:g.transitionLength,faces:indices(a>b?[1,2]:[0,3]),transition:true});
+  const ridgeA=a>=b?high:low,ridgeB=a>=b?low:high;
+  return {faces,rafters,battens,
+    hips,valleys:[{a:point(b,a),b:low,length:g.valleyLength,faces:indices([2,3])}],
+    ridge:[ridgeA,point(A,a/2,g.riseA),ridgeB,point(b/2,B,g.riseB)],
+    // Include gable peaks in the perimeter for the reference wall outline.
+    footprint:[[0,0],[A,0],[A,a/2],[A,a],[b,a],[b,B],[b/2,B],[0,B]].map(p=>point(...p)),
+    battenRows,actualSpacing};
+}
+function patchMembers(v,g,faces) {
   const rafters=[],battens=[],gaps=[],battenRows=ceil(g.rafter/(v.battenSpacing/100))+1;
   const merge = ranges => {
     const out=[];
@@ -151,17 +179,36 @@ function lRoofLayout(v, g) {
       for(const range of merge(ranges))battens.push({face:range.parts[0].face,a:facePoint(face,range.from,d),b:facePoint(face,range.to,d),length:range.to-range.from,parts:range.parts.map(p=>({face:p.face,a:facePoint(face,p.from,d),b:facePoint(face,p.to,d)}))});
     }
   }
-  const high=point(hi,hi,g.rise),low=a>=b?point(b/2,a-b/2,lo*g.sin/c):point(b-a/2,a/2,lo*g.sin/c);
+  return {rafters,battens,battenRows,actualSpacing:Math.max(...gaps)*100};
+}
+// T footprint: [0,L]×[0,a] union [o,o+b]×[0,B]. Equal eave height/pitch.
+// Height/tan = min(y, max(a-y, min(x-o,o+b-x))). Convex patches
+// partition that envelope exactly, including a higher perpendicular ridge.
+function tRoofLayout(v,g) {
+  const L=v.length,a=v.width,B=v.wingLength,b=v.wingWidth,o=v.wingOffset,c=g.cos,lo=Math.min(a,b)/2,faces=[];
+  const point=(x,y,z=0)=>[x-L/2,y-B/2,z];
+  const axes=[[[0,0],[1,0],[0,1]],[[0,a],[1,0],[0,-1]],[[o,B],[0,-1],[1,0]],[[o+b,B],[0,-1],[-1,0]]];
+  const patch=(group,from,to,leftIntercept,length,leftTaper,rightTaper)=>{
+    if(to-from<EPS)return;
+    const [origin,along,inward]=axes[group];
+    faces.push({group,origin:point(...origin).slice(0,2),along,inward,leftIntercept,length,leftTaper:leftTaper*c,rightTaper:rightTaper*c,taper:0,from:from/c,depth:to/c,cos:c,sin:g.sin});
+  };
+  patch(0,0,a/2,0,L,0,0);
+  if(b>a)patch(0,a/2,b/2,o,o+b,1,1);
+  patch(1,0,lo,0,o,0,-1);
+  patch(1,0,lo,o+b,L,-1,0);
+  if(a>b)patch(1,b/2,a/2,0,L,0,0);
+  for(const group of [2,3]){
+    patch(group,0,lo,0,B-a,0,-1);
+    if(b>a)patch(group,a/2,b/2,0,B,0,1);
+  }
+  const members=patchMembers(v,g,faces),tan=g.sin/c;
+  const left=point(o+lo,a-lo,lo*tan),right=point(o+b-lo,a-lo,lo*tan),peak=point(o+b/2,b/2,b/2*tan);
   const indices=groups=>groups.map(group=>faces.findIndex(f=>f.group===group));
-  const hips=[{a:point(0,0),b:high,length:g.hipLength,faces:indices([0,1])}];
-  if(g.transitionLength>EPS)hips.push({a:low,b:high,length:g.transitionLength,faces:indices(a>b?[1,2]:[0,3]),transition:true});
-  const ridgeA=a>=b?high:low,ridgeB=a>=b?low:high;
-  return {faces,rafters,battens,
-    hips,valleys:[{a:point(b,a),b:low,length:g.valleyLength,faces:indices([2,3])}],
-    ridge:[ridgeA,point(A,a/2,g.riseA),ridgeB,point(b/2,B,g.riseB)],
-    // Include gable peaks in the perimeter for the reference wall outline.
-    footprint:[[0,0],[A,0],[A,a/2],[A,a],[b,a],[b,B],[b/2,B],[0,B]].map(p=>point(...p)),
-    battenRows,actualSpacing:Math.max(...gaps)*100};
+  const valleys=[{a:point(o,a),b:left,length:g.valleyLength/2,faces:indices([1,2])},{a:point(o+b,a),b:right,length:g.valleyLength/2,faces:indices([1,3])}];
+  const hips=b>a?[{a:left,b:peak,length:g.transitionLength,faces:indices([0,2]),transition:true},{a:right,b:peak,length:g.transitionLength,faces:indices([0,3]),transition:true}]:[];
+  const ridge=b<=a?[point(0,a/2,g.riseA),point(L,a/2,g.riseA),left,point(o+b/2,B,g.riseB)]:[point(0,a/2,g.riseA),left,right,point(L,a/2,g.riseA),peak,point(o+b/2,B,g.riseB)];
+  return {faces,...members,hips,valleys,ridge,footprint:[[0,0],[L,0],[L,a/2],[L,a],[o+b,a],[o+b,B],[o+b/2,B],[o,B],[o,a],[0,a],[0,a/2]].map(p=>point(...p))};
 }
 // Join two mirrored L junctions on a common crossbar. The split is an internal
 // modelling seam, not a valley, wall or extra purchased structural member.
@@ -210,9 +257,9 @@ function beamRow(id, name, lengths, section, reserve) {
 }
 export function calculate(v) {
   const g = geometry(v), layout = roofLayout(v, g), reserve = 1 + v.waste / 100;
-  const rows = [beamRow('rafters', ['hip','lshape','ushape'].includes(v.shape) ? 'Căpriori comuni și scurți' : 'Grinzi pentru căpriori', layout.rafters.map(r => r.length), v.section, reserve)];
-  if (layout.hips.length) rows.push(beamRow('hips', v.shape === 'ushape' ? 'Căpriori diagonali · muchii și racorduri' : v.shape === 'lshape' ? (g.transitionLength>EPS?'Căpriori diagonali · muchie și racord':'Căprior diagonal · muchie exterioară') : 'Căpriori diagonali · 4 muchii', layout.hips.map(r => r.length), v.hipSection, reserve));
-  if (layout.valleys.length) rows.push(beamRow('valleys', v.shape === 'ushape' ? 'Grinzi de dolie · 2 colțuri interioare' : 'Grindă de dolie · colț interior', layout.valleys.map(r => r.length), v.valleySection, reserve));
+  const rows = [beamRow('rafters', ['hip','lshape','ushape','tshape'].includes(v.shape) ? 'Căpriori comuni și scurți' : 'Grinzi pentru căpriori', layout.rafters.map(r => r.length), v.section, reserve)];
+  if (layout.hips.length) rows.push(beamRow('hips', ['ushape','tshape'].includes(v.shape) ? 'Căpriori diagonali · muchii și racorduri' : v.shape === 'lshape' ? (g.transitionLength>EPS?'Căpriori diagonali · muchie și racord':'Căprior diagonal · muchie exterioară') : 'Căpriori diagonali · 4 muchii', layout.hips.map(r => r.length), v.hipSection, reserve));
+  if (layout.valleys.length) rows.push(beamRow('valleys', ['ushape','tshape'].includes(v.shape) ? 'Grinzi de dolie · 2 colțuri interioare' : 'Grindă de dolie · colț interior', layout.valleys.map(r => r.length), v.valleySection, reserve));
   if (v.boards) {
     const count = ceil(g.area * reserve / (.2 * 4)), volume = count * .025 * .2 * 4;
     rows.push({ id: 'boards', name: 'Scândură pentru astereală', slug: 'scandura-dimensionata', image: 'scandura-dimensionata-depozit-01.avif', unit: 'm³', price: [1100, 1300], count, stockLength: 4, section: '2.5x20', volume, billQuantity: volume, netQuantity: g.area });
@@ -227,5 +274,5 @@ export function calculate(v) {
   }
   for (const r of rows) r.cost = r.billQuantity === null ? null : r.price.map(p => p * r.billQuantity);
   const complete = rows.every(r => r.cost !== null);
-  return { ...g, layout, positions: ['hip','lshape','ushape'].includes(v.shape) ? null : layout.rafters.length / g.slopes, rafters: layout.rafters.length, battenRows: layout.battenRows, actualSpacing: layout.actualSpacing, rows, complete, volume: complete ? rows.reduce((n, r) => n + r.volume, 0) : null, price: complete ? [0, 1].map(i => rows.reduce((n, r) => n + r.cost[i], 0)) : null };
+  return { ...g, layout, positions: ['hip','lshape','ushape','tshape'].includes(v.shape) ? null : layout.rafters.length / g.slopes, rafters: layout.rafters.length, battenRows: layout.battenRows, actualSpacing: layout.actualSpacing, rows, complete, volume: complete ? rows.reduce((n, r) => n + r.volume, 0) : null, price: complete ? [0, 1].map(i => rows.reduce((n, r) => n + r.cost[i], 0)) : null };
 }

@@ -27,7 +27,7 @@ test('Hiding the board reveals the beam without deleting its geometry',()=>{
 });
 test('All roof shapes, material combinations and rotations obey per-pixel nearest-surface visibility',()=>{
   const width=80,height=80;
-  for(const config of [{shape:'ushape',length:18,width:6,wingWidth:5,wingLength:14,rightWingWidth:4,rightWingLength:12},{shape:'mono'},{shape:'gable'},{shape:'hip'},{shape:'lshape',wingWidth:6,wingLength:10},{shape:'lshape',wingWidth:3,wingLength:10},{shape:'lshape',width:3,wingWidth:6,wingLength:10}]) for(const mode of ['assembled','layers']) for(const yaw of [-.62,.95,2.52,4.09]) {
+  for(const config of [{shape:'tshape',length:18,width:6,wingWidth:8,wingLength:14,wingOffset:2},{shape:'ushape',length:18,width:6,wingWidth:5,wingLength:14,rightWingWidth:4,rightWingLength:12},{shape:'mono'},{shape:'gable'},{shape:'hip'},{shape:'lshape',wingWidth:6,wingLength:10},{shape:'lshape',wingWidth:3,wingLength:10},{shape:'lshape',width:3,wingWidth:6,wingLength:10}]) for(const mode of ['assembled','layers']) for(const yaw of [-.62,.95,2.52,4.09]) {
     const shape=config.shape,v={...DEFAULTS,length:8,width:6,...config},r=calculate(v),scene=buildRoofScene(v,r,mode);
     const colors={rafters:'#32502a',boards:'#dce6d2',counter:'#5d8754',battens:'#9fb778'};
     const raw=([x,y,z])=>[x*Math.cos(yaw)-y*Math.sin(yaw),(x*Math.sin(yaw)+y*Math.cos(yaw))*Math.sin(.49)-z*Math.cos(.49),(x*Math.sin(yaw)+y*Math.cos(yaw))*Math.cos(.49)+z*Math.sin(.49)];

@@ -65,7 +65,7 @@ export function buildRoofScene(v, r, mode = 'layers') {
       return {normal,d:dot(normal,a)};
     });
   });
-  const trimFace=(member,index,under=false)=>['lshape','ushape'].includes(v.shape) ? clipToRoof(member,[...footprintPlanes[index],...(under?[roofPlanes[index]]:[])]) : under ? clipToRoof(member,roofPlanes) : member;
+  const trimFace=(member,index,under=false)=>['lshape','ushape','tshape'].includes(v.shape) ? clipToRoof(member,[...footprintPlanes[index],...(under?[roofPlanes[index]]:[])]) : under ? clipToRoof(member,roofPlanes) : member;
   for (const member of r.layout.rafters) for (const line of member.parts || [member]) {
     const face = r.layout.faces[line.face], normal = normalOf(face), across = [...face.along,0];
     members.push(trimFace(prism(shift(line.a,normal,0,'rafters'),shift(line.b,normal,0,'rafters'),across,normal,beamWidth,beamHeight,'rafters'),line.face,true));
@@ -95,6 +95,10 @@ export function buildRoofScene(v, r, mode = 'layers') {
     members.push(trimFace(prism(shift(line.a,normal,h,'battens'),shift(line.b,normal,h,'battens'),tangent,normal,.05,.03,'battens'),line.face));
   }
   const edgeZ = (x,y) => {
+    if(v.shape==='tshape') {
+      const X=x+v.length/2,Y=y+v.wingLength/2;
+      return base+Math.max(0,Math.min(Y,Math.max(v.width-Y,Math.min(X-v.wingOffset,v.wingOffset+v.wingWidth-X))))*r.sin/r.cos;
+    }
     if(v.shape==='ushape') {
       const X=x+v.length/2,Y=y+Math.max(v.wingLength,v.rightWingLength)/2;
       const left=X<=r.layout.split, localX=left?X:v.length-X, width=left?v.wingWidth:v.rightWingWidth;
