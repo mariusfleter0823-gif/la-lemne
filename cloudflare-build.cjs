@@ -42,6 +42,16 @@ for (const name of fs.readdirSync(root)) {
   }
   fs.writeFileSync(path.join(out, name), text);
 }
+// Version the calculator's module dependencies before hashing its entry script.
+// Otherwise a fresh HTML/entry script can still import a cached older math module.
+for (const name of ['roof-math.mjs', 'roof-render.mjs', 'roof-scene.mjs', 'calculator.js']) {
+  const target = path.join(out, name);
+  const source = fs.readFileSync(target, 'utf8').replace(/(from\s+['"])(\.\/[^'"?]+\.mjs)(?:\?v=[^'"]*)?(['"])/g, (_, prefix, url, quote) => {
+    const hash = crypto.createHash('sha256').update(fs.readFileSync(path.join(out, url))).digest('hex').slice(0, 10);
+    return prefix + url + '?v=' + hash + quote;
+  });
+  fs.writeFileSync(target, source);
+}
 // Hash the transformed scripts, so updates invalidate browser caches correctly.
 for (const name of htmlFiles) {
   const target = path.join(out, name);
