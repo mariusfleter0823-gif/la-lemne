@@ -440,3 +440,11 @@
 @media(max-width:800px){:where(.calculator-page main) .form-divider{display:block}:where(.calculator-page main) .shape-options{grid-template-columns:repeat(4,minmax(0,1fr))}:where(.calculator-page main) .shape-option{flex-direction:column}}
 @media(max-width:520px){:where(.calculator-page main) .shape-options{grid-template-columns:repeat(2,minmax(0,1fr))}:where(.calculator-page main) .shape-option{flex-direction:column;gap:6px}:where(.calculator-page main) .stage-toolbar{left:8px;right:8px}:where(.calculator-page main) .stage-toolbar .segmented button{padding-inline:10px}:where(.calculator-page main) .quote-panel{display:block}:where(.calculator-page main) .quote-panel h3{max-width:none;font-size:16px}:where(.calculator-page main) .quote-price{margin-top:16px}:where(.calculator-page main) .quantity{padding-left:0}:where(.calculator-page main) .material-row{grid-template-columns:minmax(0,1fr) 115px}:where(.calculator-page main) .intro-copy{font-size:16px}}
 @media print{:where(.calculator-page main) .visual-panel{position:static}}
+
+/* Roof choices remain legible in the narrow configuration panel. */
+.calculator-page .shape-option { flex-direction: column; gap: 8px; padding: 12px 8px; }
+.calculator-page .shape-option svg { width: 80px; height: 50px; flex: none; }
+.calculator-page .shape-option:has(:checked) { border-color: var(--ink); font-weight: 600; }
+.calculator-page .lshape-plan[hidden] { display: none; }
+.calculator-page .lshape-plan svg { width: 100%; height: 155px; }
+@media (min-width:521px) and (max-width:800px) { .calculator-page .shape-options { grid-template-columns:repeat(3,1fr); } }

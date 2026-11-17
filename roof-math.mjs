@@ -1,7 +1,7 @@
-export const DEFAULTS = Object.freeze({ shape: 'gable', length: 12, width: 8, wingLength: 14, wingWidth: 8, pitch: 35, waste: 10, spacing: 80, section: '8x15', hipSection: '15x20', valleySection: '15x20', battenSpacing: 35, boards: true, battens: true, counter: true });
-export const SHAPES = { mono: 'într-o apă', gable: 'în două ape egale', hip: 'în patru ape egale ca pantă', lshape: 'în L, cu două aripi și aceeași pantă' };
+export const DEFAULTS = Object.freeze({ shape: 'gable', length: 12, width: 8, wingLength: 14, wingWidth: 8, rightWingLength: 12, rightWingWidth: 4, pitch: 35, waste: 10, spacing: 80, section: '8x15', hipSection: '15x20', valleySection: '15x20', battenSpacing: 35, boards: true, battens: true, counter: true });
+export const SHAPES = { mono: 'într-o apă', gable: 'în două ape egale', hip: 'în patru ape egale ca pantă', lshape: 'în L, cu două aripi și aceeași pantă', ushape: 'în U, cu trei corpuri și aceeași pantă' };
 export const SECTIONS = ['8x10', '8x15', '10x10', '10x12', '10x15', '10x20', '12x12', '15x15', '15x20', '15x25', '20x20'];
-export const LIMITS = { length: [2, 40], width: [2, 20], wingLength: [2, 50], wingWidth: [2, 20], pitch: [5, 60], waste: [0, 25], spacing: [30, 120], battenSpacing: [15, 50] };
+export const LIMITS = { length: [2, 40], width: [2, 20], wingLength: [2, 50], wingWidth: [2, 20], rightWingLength: [2, 50], rightWingWidth: [2, 20], pitch: [5, 60], waste: [0, 25], spacing: [30, 120], battenSpacing: [15, 50] };
 const EPS = 1e-9, ceil = n => Math.ceil(n - EPS);
 export function restoreSettings(saved) {
   const { extension, ...current } = saved || {};
@@ -11,21 +11,35 @@ export function restoreSettings(saved) {
 }
 export function validate(v) {
   const errors = {};
-  for (const [key, [min, max]] of Object.entries(LIMITS)) if ((!['wingLength','wingWidth'].includes(key) || v.shape === 'lshape') && (!Number.isFinite(v[key]) || v[key] < min || v[key] > max)) errors[key] = `Introdu o valoare între ${min} și ${max}.`;
+  for (const [key, [min, max]] of Object.entries(LIMITS)) if ((!['wingLength','wingWidth','rightWingLength','rightWingWidth'].includes(key) || (['wingLength','wingWidth'].includes(key) ? ['lshape','ushape'].includes(v.shape) : v.shape === 'ushape')) && (!Number.isFinite(v[key]) || v[key] < min || v[key] > max)) errors[key] = `Introdu o valoare între ${min} și ${max}.`;
   if (!Object.hasOwn(SHAPES, v.shape)) errors.shape = 'Alege o formă de acoperiș.';
   if (!SECTIONS.includes(v.section)) errors.section = 'Alege o secțiune din listă.';
-  if (['hip','lshape'].includes(v.shape) && !SECTIONS.includes(v.hipSection)) errors.hipSection = 'Alege secțiunea căpriorilor diagonali.';
+  if (['hip','lshape','ushape'].includes(v.shape) && !SECTIONS.includes(v.hipSection)) errors.hipSection = 'Alege secțiunea căpriorilor diagonali.';
   if (v.shape === 'lshape') {
     const minA = Math.max(v.wingWidth + 1, v.width / 2 + 1), minB = Math.max(v.width + 1, v.wingWidth / 2 + 1);
     if (!errors.length && Number.isFinite(minA) && v.length < minA) errors.length = `Lungimea A trebuie să fie de minimum ${Math.ceil(minA * 10) / 10} m pentru acest racord în L.`;
     if (!errors.wingLength && Number.isFinite(minB) && v.wingLength < minB) errors.wingLength = `Lungimea B trebuie să fie de minimum ${Math.ceil(minB * 10) / 10} m pentru acest racord în L.`;
     if (!SECTIONS.includes(v.valleySection)) errors.valleySection = 'Alege secțiunea grinzii de dolie.';
   }
+  if (v.shape === 'ushape') {
+    const minLength = Math.max(v.wingWidth+1,v.width/2+1)+Math.max(v.rightWingWidth+1,v.width/2+1);
+    if (!errors.length && v.length < minLength) errors.length = `Lungimea A trebuie să fie de minimum ${Math.ceil(minLength*10)/10} m pentru a separa cele două racorduri și curtea interioară.`;
+    for (const [key,width] of [['wingLength',v.wingWidth],['rightWingLength',v.rightWingWidth]]) {
+      const min = Math.max(v.width+1,width/2+1);
+      if (!errors[key] && v[key] < min) errors[key] = `Lungimea totală trebuie să fie de minimum ${Math.ceil(min*10)/10} m, inclusiv corpul A.`;
+    }
+    if (!SECTIONS.includes(v.valleySection)) errors.valleySection = 'Alege secțiunea grinzilor de dolie.';
+  }
   return errors;
 }
 export function geometry(v) {
   const errors = validate(v);
   if (Object.keys(errors).length) throw new RangeError(JSON.stringify(errors));
+  if (v.shape === 'ushape') {
+    const [left,right] = uParts(v), a = geometry(left), b = geometry(right);
+    const plan = v.length*v.width + v.wingWidth*(v.wingLength-v.width) + v.rightWingWidth*(v.rightWingLength-v.width);
+    return {...a, slopes:6, plan, area:plan/a.cos, run:Math.max(a.run,b.run), rafter:Math.max(a.rafter,b.rafter), rise:Math.max(a.rise,b.rise), riseC:b.riseB, ridge:a.ridge+b.ridge, hipLength:a.hipLength+b.hipLength, valleyLength:a.valleyLength+b.valleyLength, transitionLength:a.transitionLength+b.transitionLength};
+  }
   const lshape = v.shape === 'lshape', slopes = { mono: 1, gable: 2, hip: 4, lshape: 4 }[v.shape];
   const run = lshape ? Math.max(v.width,v.wingWidth)/2 : v.shape === 'hip' ? Math.min(v.length, v.width) / 2 : v.width / slopes;
   const angle = v.pitch * Math.PI / 180, cos = Math.cos(angle), sin = Math.sin(angle);
@@ -56,6 +70,7 @@ function grid(anchors, maximum) {
   return points;
 }
 export function roofLayout(v, g = geometry(v)) {
+  if (v.shape === 'ushape') return uRoofLayout(v);
   if (v.shape === 'lshape') return lRoofLayout(v, g);
   const L = v.length, W = v.width, hip = v.shape === 'hip';
   const definitions = hip ? [
@@ -148,6 +163,38 @@ function lRoofLayout(v, g) {
     footprint:[[0,0],[A,0],[A,a/2],[A,a],[b,a],[b,B],[b/2,B],[0,B]].map(p=>point(...p)),
     battenRows,actualSpacing:Math.max(...gaps)*100};
 }
+// Join two mirrored L junctions on a common crossbar. The split is an internal
+// modelling seam, not a valley, wall or extra purchased structural member.
+function uParts(v) {
+  const minLeft=Math.max(v.wingWidth+1,v.width/2+1), minRight=Math.max(v.rightWingWidth+1,v.width/2+1);
+  const split=Math.max(minLeft,Math.min(v.length-minRight,(v.wingWidth+v.length-v.rightWingWidth)/2));
+  return [{...v,shape:'lshape',length:split},{...v,shape:'lshape',length:v.length-split,wingLength:v.rightWingLength,wingWidth:v.rightWingWidth}];
+}
+function uRoofLayout(v) {
+  const parts=uParts(v), depth=Math.max(v.wingLength,v.rightWingLength);
+  const out={faces:[],rafters:[],battens:[],hips:[],valleys:[],ridge:[],actualSpacing:0,battenRows:0};
+  for (const [side,part] of parts.entries()) {
+    const layout=lRoofLayout(part,geometry(part)), offset=out.faces.length;
+    const point=p=>[side?v.length/2-(p[0]+part.length/2):p[0]+part.length/2-v.length/2,p[1]+part.wingLength/2-depth/2,p[2]||0];
+    const direction=p=>[side?-p[0]:p[0],p[1]];
+    out.faces.push(...layout.faces.map(f=>({...f,origin:point(f.origin).slice(0,2),along:direction(f.along),inward:direction(f.inward)})));
+    const line=l=>({...l,a:point(l.a),b:point(l.b),...(l.face===undefined?{}:{face:l.face+offset}),...(l.faces?{faces:l.faces.map(i=>i+offset)}:{}),...(l.parts?{parts:l.parts.map(p=>({...p,a:point(p.a),b:point(p.b),face:p.face+offset}))}:{})});
+    for(const key of ['rafters','battens','hips','valleys'])out[key].push(...layout[key].map(line));
+    out.ridge.push(...layout.ridge.map(point));
+    out.actualSpacing=Math.max(out.actualSpacing,layout.actualSpacing);out.battenRows=Math.max(out.battenRows,layout.battenRows);
+  }
+  const unique=new Map();
+  for(const r of out.rafters){
+    const key=[r.a,r.b].map(p=>p.map(n=>n.toFixed(7)).join(',')).sort().join('|');
+    const previous=unique.get(key);
+    if(previous)previous.parts.push(...r.parts);else unique.set(key,r);
+  }
+  out.rafters=[...unique.values()];
+  const L=v.length,a=v.width,b=v.wingWidth,c=v.rightWingWidth,B=v.wingLength,C=v.rightWingLength;
+  out.footprint=[[0,0],[L,0],[L,C],[L-c/2,C],[L-c,C],[L-c,a],[b,a],[b,B],[b/2,B],[0,B]].map(([x,y])=>[x-L/2,y-depth/2,0]);
+  out.split=parts[0].length;
+  return out;
+}
 // One structural member per stock beam. No automatic offcut reuse or structural joints.
 function beamRow(id, name, lengths, section, reserve) {
   const groups = new Map();
@@ -163,9 +210,9 @@ function beamRow(id, name, lengths, section, reserve) {
 }
 export function calculate(v) {
   const g = geometry(v), layout = roofLayout(v, g), reserve = 1 + v.waste / 100;
-  const rows = [beamRow('rafters', ['hip','lshape'].includes(v.shape) ? 'Căpriori comuni și scurți' : 'Grinzi pentru căpriori', layout.rafters.map(r => r.length), v.section, reserve)];
-  if (layout.hips.length) rows.push(beamRow('hips', v.shape === 'lshape' ? (g.transitionLength>EPS?'Căpriori diagonali · muchie și racord':'Căprior diagonal · muchie exterioară') : 'Căpriori diagonali · 4 muchii', layout.hips.map(r => r.length), v.hipSection, reserve));
-  if (layout.valleys.length) rows.push(beamRow('valleys', 'Grindă de dolie · colț interior', layout.valleys.map(r => r.length), v.valleySection, reserve));
+  const rows = [beamRow('rafters', ['hip','lshape','ushape'].includes(v.shape) ? 'Căpriori comuni și scurți' : 'Grinzi pentru căpriori', layout.rafters.map(r => r.length), v.section, reserve)];
+  if (layout.hips.length) rows.push(beamRow('hips', v.shape === 'ushape' ? 'Căpriori diagonali · muchii și racorduri' : v.shape === 'lshape' ? (g.transitionLength>EPS?'Căpriori diagonali · muchie și racord':'Căprior diagonal · muchie exterioară') : 'Căpriori diagonali · 4 muchii', layout.hips.map(r => r.length), v.hipSection, reserve));
+  if (layout.valleys.length) rows.push(beamRow('valleys', v.shape === 'ushape' ? 'Grinzi de dolie · 2 colțuri interioare' : 'Grindă de dolie · colț interior', layout.valleys.map(r => r.length), v.valleySection, reserve));
   if (v.boards) {
     const count = ceil(g.area * reserve / (.2 * 4)), volume = count * .025 * .2 * 4;
     rows.push({ id: 'boards', name: 'Scândură pentru astereală', slug: 'scandura-dimensionata', image: 'scandura-dimensionata-depozit-01.avif', unit: 'm³', price: [1100, 1300], count, stockLength: 4, section: '2.5x20', volume, billQuantity: volume, netQuantity: g.area });
@@ -180,5 +227,5 @@ export function calculate(v) {
   }
   for (const r of rows) r.cost = r.billQuantity === null ? null : r.price.map(p => p * r.billQuantity);
   const complete = rows.every(r => r.cost !== null);
-  return { ...g, layout, positions: ['hip','lshape'].includes(v.shape) ? null : layout.rafters.length / g.slopes, rafters: layout.rafters.length, battenRows: layout.battenRows, actualSpacing: layout.actualSpacing, rows, complete, volume: complete ? rows.reduce((n, r) => n + r.volume, 0) : null, price: complete ? [0, 1].map(i => rows.reduce((n, r) => n + r.cost[i], 0)) : null };
+  return { ...g, layout, positions: ['hip','lshape','ushape'].includes(v.shape) ? null : layout.rafters.length / g.slopes, rafters: layout.rafters.length, battenRows: layout.battenRows, actualSpacing: layout.actualSpacing, rows, complete, volume: complete ? rows.reduce((n, r) => n + r.volume, 0) : null, price: complete ? [0, 1].map(i => rows.reduce((n, r) => n + r.cost[i], 0)) : null };
 }

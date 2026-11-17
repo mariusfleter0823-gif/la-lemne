@@ -7,7 +7,7 @@ const form = $('roof-form');
 const nf = (n, digits = 1) => new Intl.NumberFormat('ro-RO', { maximumFractionDigits: digits }).format(n);
 const arrow = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg>';
 let values = { ...DEFAULTS }, result, yaw = -.62, mode = 'layers', drag;
-let renderFrame = 0;
+let renderFrame = 0, sceneCache, sceneResult, sceneMode, shapeNotice = "";
 function scheduleRoofDraw() { if (!renderFrame) renderFrame = requestAnimationFrame(() => { renderFrame = 0; drawRoof(); }); }
 const visible = { rafters: true, boards: true, counter: true, battens: true };
 
@@ -33,22 +33,29 @@ function rangeText(price) { return price ? `${nf(price[0], 0)}–${nf(price[1], 
 
 function update() {
   const next = readForm(), errors = validate(next), invalid = Object.keys(errors).length > 0;
-  $('lshape-fields').hidden = next.shape !== 'lshape';
-  form.classList.toggle('is-lshape',next.shape==='lshape');
-  $('wing-a-heading').hidden = next.shape !== 'lshape';
-  $('length-label').textContent = next.shape === 'lshape' ? 'Lungime A' : 'Lungime';
-  $('width-label').textContent = next.shape === 'lshape' ? 'Lățime A' : 'Lățime';
-  $('hip-section-field').hidden = !['hip','lshape'].includes(next.shape);
-  $('valley-section-field').hidden = next.shape !== 'lshape';
-  $('shape-help').textContent = next.shape === 'lshape' ? 'Două aripi cu dimensiuni independente și aceeași pantă. Lățimi diferite înseamnă coame la înălțimi diferite, unite printr-un racord.' : next.shape === 'hip' ? `${next.length === next.width ? 'Bază pătrată: patru fețe triunghiulare, fără coamă orizontală.' : 'Bază dreptunghiulară: două trapeze și două triunghiuri.'} Toate au aceeași pantă.` : next.shape === 'gable' ? 'Două pante egale, cu coama la mijloc.' : 'Panta se întinde pe toată lățimea.';
+  const branched = ['lshape','ushape'].includes(next.shape);
+  $('lshape-fields').hidden = !branched;
+  $('lshape-plan').hidden = next.shape !== 'lshape';
+  $('ushape-fields').hidden = next.shape !== 'ushape';
+  $('wing-a-heading').textContent = next.shape === 'ushape' ? 'Corpul A · legătură' : 'Aripa A';
+  form.classList.toggle('is-lshape',branched);
+  $('wing-a-heading').hidden = !branched;
+  $('length-label').textContent = branched ? 'Lungime A' : 'Lungime';
+  $('width-label').textContent = branched ? 'Lățime A' : 'Lățime';
+  $('hip-section-field').hidden = !['hip','lshape','ushape'].includes(next.shape);
+  $('valley-section-field').hidden = !branched;
+  $('valley-section-label').textContent = next.shape === 'ushape' ? 'Secțiunea grinzilor de dolie' : 'Secțiunea grinzii de dolie';
+  $('valley-help').textContent = next.shape === 'ushape' ? 'Cele două piese din colțurile interioare, unde aripile B și C se întâlnesc cu A.' : 'Piesa din colțul interior unde se întâlnesc cele două aripi.';
+  $('shape-help').textContent = next.shape === 'ushape' ? `Trei corpuri cu dimensiuni independente, două dolii și o curte interioară liberă. Aceeași pantă pe toate fețele. ${shapeNotice}` : next.shape === 'lshape' ? 'Două aripi cu dimensiuni independente și aceeași pantă. Lățimi diferite înseamnă coame la înălțimi diferite, unite printr-un racord.' : next.shape === 'hip' ? `${next.length === next.width ? 'Bază pătrată: patru fețe triunghiulare, fără coamă orizontală.' : 'Bază dreptunghiulară: două trapeze și două triunghiuri.'} Toate au aceeași pantă.` : next.shape === 'gable' ? 'Două pante egale, cu coama la mijloc.' : 'Panta se întinde pe toată lățimea.';
   const directions = {
     gable: 'Lungimea urmează coama; lățimea trece de la o streașină la cealaltă.',
     mono: 'Lungimea urmează streașina; lățimea este distanța orizontală în direcția pantei.',
     hip: 'Introdu cele două laturi ale bazei. Coama se așază automat pe latura mai lungă.',
+    ushape: 'A este corpul de legătură; B este aripa din stânga și C cea din dreapta. Lungimile B/C includ lățimea lui A.',
     lshape: 'Măsoară separat aripile A și B, ca în schiță. Lungimile includ colțul comun.'
   };
   $('direction-help').textContent = directions[next.shape];
-  const units = { length:'m', width:'m', wingLength:'m', wingWidth:'m', pitch:'°', spacing:'cm', battenSpacing:'cm', waste:'%' };
+  const units = { length:'m', width:'m', wingLength:'m', wingWidth:'m', rightWingLength:'m', rightWingWidth:'m', pitch:'°', spacing:'cm', battenSpacing:'cm', waste:'%' };
   for (const key of Object.keys(LIMITS)) {
     $(key).setAttribute('aria-invalid', String(Boolean(errors[key])));
     const [min,max] = LIMITS[key];
@@ -75,13 +82,14 @@ function update() {
   $('area').textContent = nf(result.area);
   $('rafter').textContent = nf(result.rafter, 2);
   $('rise').textContent = nf(result.rise, 2);
-  const planText = values.shape==='lshape' ? `A: ${nf(values.length)} × ${nf(values.width)} m · B: ${nf(values.wingLength)} × ${nf(values.wingWidth)} m` : `${nf(values.length)} × ${nf(values.width)} m`;
-  $('geometry-note').textContent = `${planText}, cu streșini incluse · pantă ${nf(values.pitch)}° (${nf(result.pitchPercent)}%). ${values.shape === 'lshape' ? `Înălțime coamă A ${nf(result.riseA,2)} m / B ${nf(result.riseB,2)} m · muchie ${nf(result.hipLength,2)} m · dolie ${nf(result.valleyLength,2)} m${result.transitionLength>1e-9 ? ` · racord ${nf(result.transitionLength,2)} m` : ""}. Fără lucarne sau goluri.` : `${values.shape === 'hip' ? `Coamă ${nf(result.ridge, 2)} m · 4 diagonale de ${nf(result.hipLength, 2)} m. ` : ''}Fără lucarne, dolii sau goluri.`}`;
+  const planText = ['lshape','ushape'].includes(values.shape) ? `A: ${nf(values.length)} × ${nf(values.width)} m · B: ${nf(values.wingLength)} × ${nf(values.wingWidth)} m${values.shape==='ushape'?` · C: ${nf(values.rightWingLength)} × ${nf(values.rightWingWidth)} m`:''}` : `${nf(values.length)} × ${nf(values.width)} m`;
+  $('geometry-note').textContent = `${planText}, cu streșini incluse · pantă ${nf(values.pitch)}° (${nf(result.pitchPercent)}%). ${values.shape === 'ushape' ? `Coame A/B/C: ${nf(result.riseA,2)} / ${nf(result.riseB,2)} / ${nf(result.riseC,2)} m · 2 dolii, total ${nf(result.valleyLength,2)} m. Fără lucarne sau goluri.` : values.shape === 'lshape' ? `Înălțime coamă A ${nf(result.riseA,2)} m / B ${nf(result.riseB,2)} m · muchie ${nf(result.hipLength,2)} m · dolie ${nf(result.valleyLength,2)} m${result.transitionLength>1e-9 ? ` · racord ${nf(result.transitionLength,2)} m` : ""}. Fără lucarne sau goluri.` : `${values.shape === 'hip' ? `Coamă ${nf(result.ridge, 2)} m · 4 diagonale de ${nf(result.hipLength, 2)} m. ` : ''}Fără lucarne, dolii sau goluri.`}`;
   $('materials-subtitle').textContent = `Pentru ${nf(result.area)} m² pe pante · ${nf(values.waste)}% rezervă inclusă · rotunjit la bucăți și pachete. Nu reprezintă întreaga șarpantă.`;
   $('wood-volume').textContent = result.complete ? nf(result.volume, 2) : '—';
   $('total-price').textContent = rangeText(result.price);
   $('materials').innerHTML = result.rows.map(r => `<div class="material-row"><div class="material-name"><img src="assets/${r.image}" alt="" width="53" height="58" loading="lazy"><div><strong>${r.name}</strong><a href="/la-lemne/${r.slug}.html" target="_blank" rel="noopener">Vezi produsul ${arrow}</a></div></div><div class="quantity"><strong>${quantityText(r)}</strong><span>${rowText(r)}</span></div><div class="material-cost">${rangeText(r.cost)}<small>${nf(r.price[0], 0)}–${nf(r.price[1], 0)} lei/${r.unit}</small></div></div>`).join('');
-  $('formula').textContent = `Suprafață: ${values.shape==='lshape' ? `(${nf(values.length)} × ${nf(values.width)} + ${nf(values.wingLength)} × ${nf(values.wingWidth)} − ${nf(values.width)} × ${nf(values.wingWidth)})` : `${nf(values.length)} × ${nf(values.width)}`} ÷ cos(${nf(values.pitch)}°) = ${nf(result.area, 2)} m². ${values.shape==='lshape' ? 'Zona comună a aripilor este numărată o singură dată. ' : ''}Modelul are ${result.rafters} căpriori ${['hip','lshape'].includes(values.shape) ? `comuni și scurți, de până la ${nf(result.rafter, 2)} m, plus ${values.shape==='lshape'?`o muchie de ${nf(result.hipLength,2)} m, o dolie de ${nf(result.valleyLength,2)} m${result.transitionLength>1e-9?` și un racord de ${nf(result.transitionLength,2)} m`:''}`:`4 diagonali de ${nf(result.hipLength,2)} m`}` : `de ${nf(result.rafter, 2)} m`}. Pasul efectiv maxim între axele căpriorilor, măsurat în direcția streșinii, este ${nf(result.actualSpacing)} cm (limita introdusă: ${nf(values.spacing)} cm). Rezerva de ${nf(values.waste)}% se aplică separat fiecărei grupe de lungimi comerciale, înainte de rotunjire la bucăți.`;
+  const areaExpression = values.shape==='ushape' ? `(${nf(values.length)} × ${nf(values.width)} + ${nf(values.wingWidth)} × (${nf(values.wingLength)} − ${nf(values.width)}) + ${nf(values.rightWingWidth)} × (${nf(values.rightWingLength)} − ${nf(values.width)}))` : values.shape==='lshape' ? `(${nf(values.length)} × ${nf(values.width)} + ${nf(values.wingWidth)} × (${nf(values.wingLength)} − ${nf(values.width)}))` : `${nf(values.length)} × ${nf(values.width)}`;
+  $('formula').textContent = `Suprafață: ${areaExpression} ÷ cos(${nf(values.pitch)}°) = ${nf(result.area,2)} m². ${branched?'Suprapunerile sunt numărate o singură dată. ':''}Modelul are ${result.rafters} căpriori comuni/scurți, de până la ${nf(result.rafter,2)} m${result.layout.hips.length?`, plus ${result.layout.hips.length} diagonali de muchie/racord`:''}${result.layout.valleys.length?` și ${result.layout.valleys.length} grinzi de dolie`:''}. Pasul efectiv maxim între axe, de-a lungul streșinii, este ${nf(result.actualSpacing)} cm (limita introdusă: ${nf(values.spacing)} cm). Rezerva de ${nf(values.waste)}% se aplică separat fiecărei grupe de lungimi comerciale, înainte de rotunjirea la bucăți.`;
   const message = [
     'Bună ziua! Doresc o ofertă pentru materialele estimate în calculatorul La Lemne.',
     `Acoperiș ${SHAPES[values.shape]}: ${planText} (cu streșini), pantă ${nf(values.pitch)}°, suprafață ${nf(result.area)} m².`,
@@ -100,7 +108,8 @@ function update() {
 function drawRoof() {
   if (!result) return;
   const { length: L, width: W, shape } = values, H = result.rise;
-  const scene = buildRoofScene(values, result, mode), z = scene.base;
+  if (sceneResult !== result || sceneMode !== mode) { sceneCache = buildRoofScene(values,result,mode); sceneResult = result; sceneMode = mode; }
+  const scene = sceneCache, z = scene.base;
   for (const input of document.querySelectorAll('[data-visible]')) {
     const included = scene.enabled.includes(input.dataset.visible);
     input.checked = included && visible[input.dataset.visible];
@@ -149,8 +158,8 @@ function drawRoof() {
     const p = project(a), q = project(b), ax = p[0] + dx, ay = p[1] + dy, bx = q[0] + dx, by = q[1] + dy;
     return `<g fill="none" stroke="#5d7759" stroke-width=".8"><path d="M${p[0]},${p[1]} ${ax + dx * .15},${ay + dy * .15}M${q[0]},${q[1]} ${bx + dx * .15},${by + dy * .15}" opacity=".55"/><path d="M${ax},${ay} ${bx},${by}" marker-start="url(#dim)" marker-end="url(#dim)"/></g><text x="${(ax + bx) / 2}" y="${(ay + by) / 2 - 8}" text-anchor="middle" font-size="${vw < 500 ? 12 : 14}" fill="#264e31" stroke="#f3f8ef" stroke-width="6" paint-order="stroke" stroke-linejoin="round">${label}</text>`;
   };
-  const dimensionX = shape==='lshape' ? dimension(ground[0],ground[1],`A ${nf(L)} m`,0,25) : dimension(ground[3], ground[2], `L ${nf(L)} m`, 0, 25);
-  const dimensionY = shape==='lshape' ? dimension(ground[5],ground[7],`lB ${nf(values.wingWidth)} m`,0,25)+dimension(ground[0],ground[7],`B ${nf(values.wingLength)} m`,-22,8)+dimension(ground[1],ground[3],`lA ${nf(W)} m`,18,8) : dimension(ground[0], ground[3], `l ${nf(W)} m`, -20, 18);
+  const dimensionX = ['lshape','ushape'].includes(shape) ? dimension(ground[0],ground[1],`A ${nf(L)} m`,0,25) : dimension(ground[3], ground[2], `L ${nf(L)} m`, 0, 25);
+  const dimensionY = shape==='ushape' ? dimension(ground[0],ground[9],`B ${nf(values.wingLength)} m`,-22,8)+dimension(ground[1],ground[2],`C ${nf(values.rightWingLength)} m`,22,8) : shape==='lshape' ? dimension(ground[5],ground[7],`lB ${nf(values.wingWidth)} m`,0,25)+dimension(ground[0],ground[7],`B ${nf(values.wingLength)} m`,-22,8)+dimension(ground[1],ground[3],`lA ${nf(W)} m`,18,8) : dimension(ground[0], ground[3], `l ${nf(W)} m`, -20, 18);
   const highestPeak = peaks.reduce((a,b)=>a[2]>b[2]?a:b), peak = project(highestPeak);
   const heightGuide = `<g fill="none" stroke="#62805c" stroke-width=".8" stroke-dasharray="3 4">${line([highestPeak[0], highestPeak[1], z], highestPeak, '#62805c', .8, '3 4')}</g><text x="${peak[0] + 4}" y="${peak[1] - 17}" font-size="${vw < 500 ? 11 : 13}" text-anchor="middle" fill="#42663d" stroke="#f3f8ef" stroke-width="5" paint-order="stroke">h ${nf(H, 2)} m</text>`;
   const labels = labelSpace ? shown.map(key => {
@@ -161,12 +170,17 @@ function drawRoof() {
     return `<g data-layer-label="${key}"><path d="M${anchor[0] + 7},${anchor[1]} H${textX - textWidth - 10}" stroke="${LAYERS[key].stroke}" stroke-width=".7" opacity=".65"/><text x="${textX}" y="${anchor[1] + 4}" text-anchor="end" fill="#294a32" font-size="12">${LAYERS[key].name}</text></g>`;
   }).join('') : '';
   const description = mode === 'surface' ? 'Suprafață geometrică' : `${mode === 'layers' ? 'Straturi separate' : 'Materiale asamblate'}: ${shown.map(k => LAYERS[k].name).join(', ') || 'niciun strat vizibil'}`;
-  const accessiblePlan = shape === 'lshape' ? `cu aripa A de ${nf(L)} pe ${nf(W)} metri și aripa B de ${nf(values.wingLength)} pe ${nf(values.wingWidth)} metri` : `de ${nf(L)} pe ${nf(W)} metri`;
+  const accessiblePlan = shape === 'ushape' ? `cu corpul A de ${nf(L)} pe ${nf(W)} metri, B de ${nf(values.wingLength)} pe ${nf(values.wingWidth)} și C de ${nf(values.rightWingLength)} pe ${nf(values.rightWingWidth)} metri` : shape === 'lshape' ? `cu aripa A de ${nf(L)} pe ${nf(W)} metri și aripa B de ${nf(values.wingLength)} pe ${nf(values.wingWidth)} metri` : `de ${nf(L)} pe ${nf(W)} metri`;
   $('roof-svg').dataset.renderer = render.backend;
   $('roof-svg').innerHTML = `<title>Acoperiș ${SHAPES[shape]} ${accessiblePlan}, pantă ${nf(values.pitch)} grade. ${description}.</title><defs><marker id="dim" viewBox="0 0 10 10" markerWidth="8" markerHeight="8" refX="5" refY="5" orient="auto-start-reverse"><path d="m3 2 4 3-4 3" fill="none" stroke="#5d7759" stroke-width="1"/></marker></defs>${backdrop}<image href="${render.url}" width="${vw}" height="${vh}"/>${dimensionX}${dimensionY}${mode === 'layers' ? '' : heightGuide}${mode === 'layers' ? labels : ''}`;
 }
 
-form.addEventListener('input', e => { if (e.target.id === 'pitch-range') $('pitch').value = e.target.value; update(); });
+form.addEventListener('input', e => { shapeNotice = '';
+  if (e.target.name === 'shape' && e.target.value === 'ushape') {
+    const v=readForm(), minimum=Math.max(v.wingWidth+1,v.width/2+1)+Math.max(v.rightWingWidth+1,v.width/2+1);
+    if (Number.isFinite(minimum) && v.length<minimum && minimum<=40) { $('length').value=minimum; shapeNotice=`Exemplu adaptat: lungimea A a fost mărită la ${nf(minimum)} m pentru a lăsa loc curții și racordurilor.`; }
+  }
+  if (e.target.id === 'pitch-range') $('pitch').value = e.target.value; update(); });
 form.addEventListener('submit', e => e.preventDefault());
 $('reset').addEventListener('click', () => { setForm(DEFAULTS); yaw = -.62; mode = 'layers'; Object.keys(visible).forEach(k => visible[k] = true); document.querySelectorAll('[data-mode]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.mode === mode))); update(); });
 for (const input of document.querySelectorAll('[data-visible]')) input.addEventListener('change', () => { visible[input.dataset.visible] = input.checked; drawRoof(); });
