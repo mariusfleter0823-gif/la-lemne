@@ -16,9 +16,27 @@ for (const name of fs.readdirSync(root)) {
   let text = fs.readFileSync(path.join(root, name), 'utf8').replaceAll('/la-lemne/', '/');
   if (name.endsWith('.html')) {
     htmlFiles.push(name);
+    if (!/rel="apple-touch-icon"/.test(text)) {
+      text = text.replace('</head>', '<link rel="apple-touch-icon" sizes="180x180" href="/assets/apple-touch-icon.png"></head>');
+    }
     if (name !== '404.html') {
     pages.push(name);
     const url = pageUrl(name);
+    // Share previews use each page's existing editorial metadata, without changing its UI.
+    const title = text.match(/<title>([^<]*)<\/title>/)?.[1] || 'La Lemne';
+    const description = text.match(/<meta\b[^>]*name="description"[^>]*content="([^"]*)"/)?.[1] || '';
+    const metadata = {
+      'og:type': 'website', 'og:site_name': 'La Lemne', 'og:locale': 'ro_RO',
+      'og:title': title, 'og:description': description, 'og:url': url,
+      'og:image': origin + '/assets/social-preview.png',
+      'twitter:card': 'summary_large_image'
+    };
+    for (const [key, value] of Object.entries(metadata)) {
+      if (!text.includes('="' + key + '"')) {
+        const attr = key.startsWith('og:') ? 'property' : 'name';
+        text = text.replace('</head>', '<meta ' + attr + '="' + key + '" content="' + value.replaceAll('"', '&quot;') + '"></head>');
+      }
+    }
     if (/<link\b[^>]*rel="canonical"/.test(text)) {
       text = text.replace(/(<link\b[^>]*rel="canonical"[^>]*href=")[^"]*(")/g, '$1' + url + '$2');
     } else text = text.replace('</head>', '<link rel="canonical" href="' + url + '"></head>');
