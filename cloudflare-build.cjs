@@ -11,9 +11,24 @@ fs.mkdirSync(out, { recursive: true });
 fs.cpSync(path.join(root, 'assets'), path.join(out, 'assets'), { recursive: true });
 const pages = [];
 const htmlFiles = [];
+// Cloudflare serves clean page URLs; keep the GitHub Pages source copy intact.
+const pageNames = fs.readdirSync(root).filter(name => name.endsWith('.html'));
+const cleanPageLink = value => {
+  const url = new URL(value, origin + '/');
+  if (url.origin !== origin || !pageNames.includes(url.pathname.slice(1))) return value;
+  return (url.pathname === '/index.html' ? '/' : url.pathname.replace(/\.html$/, '')) + url.search + url.hash;
+};
 for (const name of fs.readdirSync(root)) {
   if (!/\.(html|css|js|mjs|json|txt)$/.test(name)) continue;
   let text = fs.readFileSync(path.join(root, name), 'utf8').replaceAll('/la-lemne/', '/');
+  // Static links, including links inside JavaScript-rendered markup.
+  text = text.replace(/(href=["'])([^"']+)(["'])/g, (_, start, value, end) => start + cleanPageLink(value) + end);
+  // Navigation destinations and pathname checks use the same clean URLs.
+  if (name.endsWith('.js')) {
+    text = text.replace(/(["'])(\/[^"'?#]+\.html)(["'])/g, (_, start, value, end) => start + cleanPageLink(value) + end);
+    if (name === 'catalog.js') text = text.replace("p.slug+'.html'", 'p.slug');
+    if (name === 'calculator.js') text = text.replace('${r.slug}.html', '${r.slug}');
+  }
   if (name.endsWith('.html')) {
     htmlFiles.push(name);
     if (!/rel="apple-touch-icon"/.test(text)) {
